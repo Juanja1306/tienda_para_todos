@@ -8,9 +8,11 @@ from django.views.decorators.http import require_http_methods
 from django.core.exceptions import ValidationError
 from django.http import HttpResponse
 
+#Creamos una pagina inicio test
 def home(request):
     return HttpResponse("Bienvenido a la página de inicio")
 
+#Listamos todo
 def list_categorias(request):
     categorias = Categoria.objects.all()
     data = [{"id": cat.categoria_id, "descripcion": cat.categoria_descripcion} for cat in categorias]
@@ -41,6 +43,7 @@ def list_detalle_ordenes(request):
     data = [{"id": det.detalle_id, "cantidad": det.detalle_cantidad, "precio": det.detalle_precio} for det in detalles]
     return JsonResponse(data, safe=False)
 
+#Funcion para loguear clientes
 @csrf_exempt
 def login_clientes(request):
     if request.method == 'POST':
@@ -49,14 +52,16 @@ def login_clientes(request):
         
         try:
             user = Clientes.objects.get(cli_correo=email)
+            
             if check_password(password, user.cli_contrasenia):
-                return JsonResponse({"status": "success", "user_type": "Cliente", "user_id": user.cli_cedula})
+                return JsonResponse({"status": "success", "user_type": "Cliente", "cli_cedula": user.cli_cedula})
         except Clientes.DoesNotExist:
             pass
         
         return JsonResponse({"status": "error", "message": "Invalid email or password"})
     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
+#Funcion para loguear proovedores
 @csrf_exempt
 def login_proveedores(request):
     if request.method == 'POST':
@@ -65,15 +70,19 @@ def login_proveedores(request):
         
         try:
             user = Proveedor.objects.get(prov_correo=email)
+            
             if check_password(password, user.prov_contrasenia):
-                return JsonResponse({"status": "success", "user_type": "Proveedor", "user_id": user.prov_id})
+                return JsonResponse({"status": "success", "user_type": "Proveedor", "prov_id": user.prov_id})
+            else:
+                print("Contraseña incorrecta")
         except Proveedor.DoesNotExist:
-            pass
+            print("Proveedor no encontrado")
         
         return JsonResponse({"status": "error", "message": "Invalid email or password"})
     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
-#validacion de correo
+
+#Funcion para aniadir clientes
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_cliente(request):
@@ -96,6 +105,7 @@ def add_cliente(request):
     except ValidationError as e:
         return JsonResponse({"status": "error", "message": str(e)})
 
+#Funcion para aniadir proveedores
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_proveedor(request):
@@ -117,3 +127,5 @@ def add_proveedor(request):
         return JsonResponse({"status": "error", "message": str(e)})
     except Exception as e:
         return JsonResponse({"status": "error", "message": "Error al agregar proveedor: " + str(e)})
+    
+    

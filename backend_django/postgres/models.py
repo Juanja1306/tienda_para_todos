@@ -31,7 +31,8 @@ class Proveedor(models.Model):
         return self.prov_nombre
 
     def save(self, *args, **kwargs):
-        if self.pk is None:  # Only hash the password if it's a new object
+        # Solo encripta la contraseña si no está en formato hash
+        if not self.prov_contrasenia.startswith("pbkdf2_sha256$"):
             self.prov_contrasenia = make_password(self.prov_contrasenia)
         super().save(*args, **kwargs)
     
@@ -53,7 +54,8 @@ class Clientes(models.Model):
         return f"{self.cli_nombre} {self.cli_apellido}"
 
     def save(self, *args, **kwargs):
-        if self.pk is None:  # Only hash the password if it's a new object
+        # Solo encripta la contraseña si no está en formato hash
+        if not self.cli_contrasenia.startswith("pbkdf2_sha256$"):
             self.cli_contrasenia = make_password(self.cli_contrasenia)
         super().save(*args, **kwargs)
 
