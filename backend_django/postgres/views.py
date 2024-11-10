@@ -14,31 +14,47 @@ def home(request):
     return HttpResponse("Bienvenido a la página de inicio")
 
 #------------------Listamos todo---------------------------------------
+@require_http_methods(["GET"])
 def list_categorias(request):
     categorias = Categoria.objects.all()
     data = [{"id": cat.categoria_id, "descripcion": cat.categoria_descripcion} for cat in categorias]
     return JsonResponse(data, safe=False)
 
+@require_http_methods(["GET"])
 def list_proveedores(request):
     proveedores = Proveedor.objects.all()
     data = [{"id": prov.prov_id, "nombre": prov.prov_nombre, "Correo": prov.prov_correo, "contrasenia": prov.prov_contrasenia} for prov in proveedores]
     return JsonResponse(data, safe=False)
 
+@require_http_methods(["GET"])
 def list_clientes(request):
     clientes = Clientes.objects.all()
     data = [{"cedula": cli.cli_cedula, "nombre": cli.cli_nombre, "apellido": cli.cli_apellido} for cli in clientes]
     return JsonResponse(data, safe=False)
 
+@require_http_methods(["GET"])
 def list_productos(request):
     productos = Producto.objects.all()
-    data = [{"id": prod.prod_id, "descripcion": prod.prod_descripcion, "precio": prod.prod_precio_unitario} for prod in productos]
+    data = [
+        {
+            "id": prod.prod_id,
+            "descripcion": prod.prod_descripcion,
+            "precio": prod.prod_precio_unitario,
+            "cantidad": prod.prod_stock,
+            "imagen": prod.prod_imagen.url if prod.prod_imagen else None,
+            "categoria": prod.fk_categoria_id.categoria_descripcion,
+            "proveedor": prod.fk_prov_id.prov_nombre
+        }
+        for prod in productos
+    ]
     return JsonResponse(data, safe=False)
-
+@require_http_methods(["GET"])
 def list_ordenes(request):
     ordenes = OrdenCli.objects.all()
     data = [{"id": orden.orden_id, "fecha": orden.orden_fecha, "total": orden.orden_total} for orden in ordenes]
     return JsonResponse(data, safe=False)
 
+@require_http_methods(["GET"])
 def list_detalle_ordenes(request):
     detalles = DetalleOrden.objects.all()
     data = [{"id": det.detalle_id, "cantidad": det.detalle_cantidad, "precio": det.detalle_precio} for det in detalles]
@@ -46,53 +62,75 @@ def list_detalle_ordenes(request):
 
 #-----------------Listamos los productos por categoria------------------
 @csrf_exempt
-@require_http_methods(["POST"])
-def list_productos_by_categoria(request):
-    categoria_id = request.POST.get('categoria_id')
+@require_http_methods(["GET"])
+def list_productos_by_categoria(request, categoriaid):
     try:
-        categoria = Categoria.objects.get(categoria_id=categoria_id)
+        categoria = Categoria.objects.get(categoria_id=categoriaid)
         productos = Producto.objects.filter(fk_categoria_id=categoria)
-        data = [{"id": prod.prod_id, "descripcion": prod.prod_descripcion, "precio": prod.prod_precio_unitario, "cantidad": prod.prod_stock, "imagen": prod.prod_imagen, "proveedor": prod.fk_prov_id} for prod in productos]
+        data = [
+            {
+                "id": prod.prod_id,
+                "descripcion": prod.prod_descripcion,
+                "precio": prod.prod_precio_unitario,
+                "cantidad": prod.prod_stock,
+                "imagen": prod.prod_imagen.url if prod.prod_imagen else None,
+                "categoria": prod.fk_categoria_id.categoria_descripcion,
+                "proveedor": prod.fk_prov_id.prov_nombre
+            }
+            for prod in productos
+        ]
         return JsonResponse(data, safe=False)
     except Categoria.DoesNotExist:
-        return JsonResponse({"status": "error", "message": "Categoria not found"})
-
+        return JsonResponse({"error": "Categoria no encontrada"}, status=404)
+    
 #-----------------Listamos los productos por proovedor------------------
 @csrf_exempt
-@require_http_methods(["POST"])
-def list_productos_by_proveedor(request):
-    proveedor_id = request.POST.get('proveedor_id')
+@require_http_methods(["GET"])
+def list_productos_by_proveedor(request, proveedorid):
     try:
-        proveedor = Proveedor.objects.get(prov_id=proveedor_id)
+        proveedor = Proveedor.objects.get(prov_id=proveedorid)
         productos = Producto.objects.filter(fk_prov_id=proveedor)
-        data = [{"id": prod.prod_id, "descripcion": prod.prod_descripcion, "precio": prod.prod_precio_unitario, "cantidad": prod.prod_stock, "imagen": prod.prod_imagen, "categoria": prod.fk_categoria_id} for prod in productos]
+        data = [
+            {
+                "id": prod.prod_id,
+                "descripcion": prod.prod_descripcion,
+                "precio": prod.prod_precio_unitario,
+                "cantidad": prod.prod_stock,
+                "imagen": prod.prod_imagen.url if prod.prod_imagen else None,
+                "categoria": prod.fk_categoria_id.categoria_descripcion,
+                "proveedor": prod.fk_prov_id.prov_nombre
+            }
+            for prod in productos
+        ]
         return JsonResponse(data, safe=False)
     except Proveedor.DoesNotExist:
-        return JsonResponse({"status": "error", "message": "Proveedor not found"})
-
+        return JsonResponse({"error": "Proveedor no encontrado"}, status=404)
 #-------Funciones para loguear y aniadir clientes/proveedores-------------
 #Funcion para loguear clientes
 @csrf_exempt
+@require_http_methods(["POST"])
 def login_clientes(request):
-    if request.method == 'POST':
+    try:
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
+            
         try:
             user = Clientes.objects.get(cli_correo=email)
-            
+                
             if check_password(password, user.cli_contrasenia):
                 return JsonResponse({"status": "success", "user_type": "Cliente", "cli_cedula": user.cli_cedula})
         except Clientes.DoesNotExist:
             pass
-        
+            
         return JsonResponse({"status": "error", "message": "Invalid email or password"})
-    return JsonResponse({"status": "error", "message": "Invalid request method"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": "Error al loguear cliente: " + str(e)})
 
 #Funcion para loguear proovedores
 @csrf_exempt
+@require_http_methods(["POST"])
 def login_proveedores(request):
-    if request.method == 'POST':
+    try:
         email = request.POST.get('email')
         password = request.POST.get('password')
         
@@ -107,7 +145,8 @@ def login_proveedores(request):
             print("Proveedor no encontrado")
         
         return JsonResponse({"status": "error", "message": "Invalid email or password"})
-    return JsonResponse({"status": "error", "message": "Invalid request method"})
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": "Error al loguear cliente: " + str(e)})
 
 #Funcion para aniadir clientes
 @csrf_exempt
