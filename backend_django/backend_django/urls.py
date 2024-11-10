@@ -16,7 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from postgres import views
 
 urlpatterns = [
+    path('', views.home, name='home'),  # Página de inicio
     path('admin/', admin.site.urls),
+    path('categorias/', views.list_categorias, name='list_categorias'),
+    path('proveedores/', views.list_proveedores, name='list_proveedores'),
+    path('clientes/', views.list_clientes, name='list_clientes'),
+    path('productos/', views.list_productos, name='list_productos'),
+    path('ordenes/', views.list_ordenes, name='list_ordenes'),
+    path('detalle_ordenes/', views.list_detalle_ordenes, name='list_detalle_ordenes'),
+    path('login_clientes/', views.login_clientes, name='login_clientes'),
+    path('login_proveedores/', views.login_proveedores, name='login_proveedores'),
+    path('add_cliente/', views.add_cliente, name='add_cliente'),
+    path('add_proveedor/', views.add_proveedor, name='add_proveedor'),
 ]
