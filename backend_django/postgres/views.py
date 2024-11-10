@@ -44,6 +44,32 @@ def list_detalle_ordenes(request):
     data = [{"id": det.detalle_id, "cantidad": det.detalle_cantidad, "precio": det.detalle_precio} for det in detalles]
     return JsonResponse(data, safe=False)
 
+#-----------------Listamos los productos por categoria------------------
+@csrf_exempt
+@require_http_methods(["POST"])
+def list_productos_by_categoria(request):
+    categoria_id = request.POST.get('categoria_id')
+    try:
+        categoria = Categoria.objects.get(categoria_id=categoria_id)
+        productos = Producto.objects.filter(fk_categoria_id=categoria)
+        data = [{"id": prod.prod_id, "descripcion": prod.prod_descripcion, "precio": prod.prod_precio_unitario, "cantidad": prod.prod_stock, "imagen": prod.prod_imagen, "proveedor": prod.fk_prov_id} for prod in productos]
+        return JsonResponse(data, safe=False)
+    except Categoria.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Categoria not found"})
+
+#-----------------Listamos los productos por proovedor------------------
+@csrf_exempt
+@require_http_methods(["POST"])
+def list_productos_by_proveedor(request):
+    proveedor_id = request.POST.get('proveedor_id')
+    try:
+        proveedor = Proveedor.objects.get(prov_id=proveedor_id)
+        productos = Producto.objects.filter(fk_prov_id=proveedor)
+        data = [{"id": prod.prod_id, "descripcion": prod.prod_descripcion, "precio": prod.prod_precio_unitario, "cantidad": prod.prod_stock, "imagen": prod.prod_imagen, "categoria": prod.fk_categoria_id} for prod in productos]
+        return JsonResponse(data, safe=False)
+    except Proveedor.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Proveedor not found"})
+
 #-------Funciones para loguear y aniadir clientes/proveedores-------------
 #Funcion para loguear clientes
 @csrf_exempt
@@ -143,7 +169,6 @@ def add_categoria(request):
         return JsonResponse({"status": "error", "message": str(e)})
     except Exception as e:
         return JsonResponse({"status": "error", "message": "Error al agregar categoria: " + str(e)})
-
 
 #--------------Productos--------------------------------------------------
 #Funcion para aniadir productos

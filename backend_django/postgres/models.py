@@ -13,7 +13,6 @@ class Categoria(models.Model):
     def __str__(self):
         return self.categoria_descripcion
 
-
 # Modelo Proveedores
 class Proveedor(models.Model):
     prov_id = models.AutoField(primary_key=True)
@@ -77,7 +76,6 @@ class Producto(models.Model):
     def __str__(self):
         return self.prod_descripcion
 
-
 # Modelo OrdenCli
 class OrdenCli(models.Model):
     orden_id = models.AutoField(primary_key=True)
@@ -92,7 +90,6 @@ class OrdenCli(models.Model):
 
     def __str__(self):
         return f"Orden {self.orden_id} de {self.fk_cli_cedula}"
-
 
 # Modelo DetalleOrdenCli
 class DetalleOrden(models.Model):
