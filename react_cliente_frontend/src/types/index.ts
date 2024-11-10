@@ -1,3 +1,4 @@
+//* Modelos de Base de Datos
 export type Clientes = {
     cli_cedula: string
     cli_nombre: string
@@ -46,3 +47,10 @@ export type Detalle_Ordenes_Cli = {
     fk_det_ord_prod: Productos['pro_id']
     det_ord_precio: number
 }
+
+//* Modelos para la App
+
+export type CartItem = Pick<Productos, 'pro_id' | 'pro_descripcion' | 'pro_precio_unitario'| 'pro_imagen' | 'fk_cat_id'| 'fk_pro_provid'>  & {
+    cantidad : number
+}
+

@@ -14,7 +14,7 @@
   --white: rgb(255, 255, 255);
 
   /* Fonts */
-  --ubuntu: "Ubuntu", sans-serif;
+  --embed_code: "Varela Round", sans-serif;
 }
 
 body {
@@ -42,9 +42,12 @@ body {
 .title a {
   color: #ffff;
   text-decoration: none;
+  font-family: var(--embed_code);
 }
 
-nav {}
+nav {
+  font-family: var(--embed_code);
+}
 
 .carrito {
   background-color: transparent;
