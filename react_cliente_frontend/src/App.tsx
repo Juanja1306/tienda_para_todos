@@ -1,24 +1,34 @@
+
 import Header from "./components/Header"
 import ProductosComponent from "./components/ProductosComponent"
-import { dbProductos } from "./data/db"
+import { useFetchProductos } from "./hooks/useFetchProductos"
 
-function App() {
+
+
+
+function App() { 
+
+  const {productos} = useFetchProductos()
+  
 
   return (
     <>
       <Header />
       <main>
         <h2>Nuestros Productos</h2>
-        <div>
-          {dbProductos.map(producto => (
-            <>
+        <div className="cont--productos">
+          {productos.map(producto => (
+            <div className="producto">
               <ProductosComponent
                 key={producto.pro_id}
                 producto={producto}
               />
-            </>
-          ))}
+            </div>
+
+          ))
+          }
         </div>
+
       </main>
     </>
   )
