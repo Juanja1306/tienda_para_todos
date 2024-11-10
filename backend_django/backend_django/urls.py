@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from postgres import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('', views.home, name='home'),  # Página de inicio
@@ -31,4 +33,6 @@ urlpatterns = [
     path('login_proveedores/', views.login_proveedores, name='login_proveedores'),
     path('add_cliente/', views.add_cliente, name='add_cliente'),
     path('add_proveedor/', views.add_proveedor, name='add_proveedor'),
-]
+    path('add_categoria/', views.add_categoria, name='add_categoria'),
+    path('add_producto/', views.add_producto, name='add_producto'),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
