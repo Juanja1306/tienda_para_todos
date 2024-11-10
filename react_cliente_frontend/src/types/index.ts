@@ -34,22 +34,21 @@ export type Productos = {
 }
 
 export type Ordenes_Cli = {
-    ord_cli_id: number
-    ord_cli_fecha: string
-    fk_ord_cli_cedula: Clientes['cli_cedula']
-    ord_cli_total: number
+    orden_id: number
+    fk_cli_cedula: string
+    orden_fecha: Clientes['cli_cedula']
+    orden_total: number
 }
 
 export type Detalle_Ordenes_Cli = {
-    det_ord_id: number
-    fk_det_ord_ordenid: Ordenes_Cli['ord_cli_id']
-    det_ord_cantidad: number
-    fk_det_ord_prod: Productos['pro_id']
-    det_ord_precio: number
+    detalle_id: number
+    fk_orden_id: Ordenes_Cli['orden_id']
+    fk_prod_id: Productos['pro_id']
+    detalle_cantidad: Productos['pro_id']
+    detalle_precio: number
 }
 
 //* Modelos para la App
-
 export type CartItem = Pick<Productos, 'pro_id' | 'pro_descripcion' | 'pro_precio_unitario'| 'pro_imagen' | 'fk_cat_id'| 'fk_pro_provid'>  & {
     cantidad : number
 }
