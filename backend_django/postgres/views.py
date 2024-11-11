@@ -61,9 +61,16 @@ def list_ordenes(request):
 @require_http_methods(["GET"])
 def list_detalle_ordenes(request):
     detalles = DetalleOrden.objects.all()
-    data = [{"id": det.detalle_id, "cantidad": det.detalle_cantidad, "precio": det.detalle_precio} for det in detalles]
+    data = [
+        {
+            "id": det.detalle_id,
+            "cantidad": det.detalle_cantidad,
+            "precio": det.detalle_precio,
+            "orden": det.fk_orden_id_id  # Accede solo al ID
+        }
+        for det in detalles
+    ]
     return JsonResponse(data, safe=False)
-
 #-----------------Listamos los productos por categoria------------------
 @csrf_exempt
 @require_http_methods(["GET"])
