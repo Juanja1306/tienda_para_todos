@@ -38,4 +38,6 @@ urlpatterns = [
     path('add_categoria/', views.add_categoria, name='add_categoria'),
     path('add_producto/', views.add_producto, name='add_producto'),
     path('create_order/', views.create_order, name='create_order'),
+    path('productos_vendidos_por_proveedor/<int:proveedorid>/', views.productos_vendidos_por_proveedor, name='productos_vendidos_por_proveedor'),
+    path('productos_vendidos_por_categoria/<int:categoriaid>/', views.productos_vendidos_por_categoria, name='productos_vendidos_por_categoria'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

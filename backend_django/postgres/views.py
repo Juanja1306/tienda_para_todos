@@ -303,3 +303,65 @@ def create_order(request):
         return JsonResponse({"status": "error", "message": "Producto no encontrado"}, status=404)
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=500)
+    
+#-----------------Productos vendidos por proveedor-------------------------------------------
+@require_http_methods(["GET"])
+def productos_vendidos_por_proveedor(request, proveedorid):
+    try:
+        proveedor = Proveedor.objects.get(prov_id=proveedorid)
+        productos = Producto.objects.filter(fk_prov_id=proveedor)
+        productos_vendidos = []
+
+        for producto in productos:
+            detalles = DetalleOrden.objects.filter(fk_prod_id=producto)
+            cantidad_vendida = sum(detalle.detalle_cantidad for detalle in detalles)
+
+            if cantidad_vendida > 0:
+                productos_vendidos.append({
+                    "id": producto.prod_id,
+                    "descripcion": producto.prod_descripcion,
+                    "precio": producto.prod_precio_unitario,
+                    "cantidad_vendida": cantidad_vendida
+                })
+
+        data = {
+            "proveedor": proveedor.prov_nombre,
+            "productos_vendidos": productos_vendidos
+        }
+
+        return JsonResponse(data, safe=False)
+    except Proveedor.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Proveedor no encontrado"}, status=404)
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+    
+#-----------------Productos vendidos por categoria-------------------------------------------
+@require_http_methods(["GET"])
+def productos_vendidos_por_categoria(request, categoriaid):
+    try:
+        categoria = Categoria.objects.get(categoria_id=categoriaid)
+        productos = Producto.objects.filter(fk_categoria_id=categoria)
+        productos_vendidos = []
+
+        for producto in productos:
+            detalles = DetalleOrden.objects.filter(fk_prod_id=producto)
+            cantidad_vendida = sum(detalle.detalle_cantidad for detalle in detalles)
+
+            if cantidad_vendida > 0:
+                productos_vendidos.append({
+                    "id": producto.prod_id,
+                    "descripcion": producto.prod_descripcion,
+                    "precio": producto.prod_precio_unitario,
+                    "cantidad_vendida": cantidad_vendida
+                })
+
+        data = {
+            "categoria": categoria.categoria_descripcion,
+            "productos_vendidos": productos_vendidos
+        }
+
+        return JsonResponse(data, safe=False)
+    except Categoria.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Categoria no encontrada"}, status=404)
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
