@@ -2,30 +2,27 @@ import { Productos } from "../types"
 
 type ProductosProps = {
     producto: Productos
+    addToCart: (item:Productos) => void
 }
 
-export default function ProductosComponent({ producto }: ProductosProps) {
+export default function ProductosComponent({ producto, addToCart }: ProductosProps) {
 
     
-
-    const addToCart = (producto: Productos) => {
-        console.log(producto)
-    }
 
     const { pro_descripcion, pro_imagen, pro_precio_unitario } = producto
 
     return (
         <>
-            <div className="col-md-6 col-lg-4 my-4 row align-items-center">
-                <div className="col-4">
-                    <img className="img-fluid" src={`/img/${pro_imagen}.jpg`} alt="imagen producto" />
+            <div className="productos-card">
+                <div className="productos-card__image-container">
+                    <img className="productos-card__image" src={`/img/${pro_imagen}.jpg`} alt="imagen producto" />
                 </div>
-                <div className="col-8">
-                    <h3 className="text-black fs-4 fw-bold text-uppercase">{pro_descripcion}</h3>
-                    <p className="fw-black text-primary fs-3">{`$ ${pro_precio_unitario}`}</p>
+                <div className="productos-card__details">
+                    <h3 className="productos-card__title">{pro_descripcion}</h3>
+                    <p className="productos-card__price">{`$ ${pro_precio_unitario}`}</p>
                     <button
                         type="button"
-                        className="btn btn-dark w-100"
+                        className="productos-card__button"
                         onClick={() => addToCart(producto)}
                     >Agregar al Carrito</button>
                 </div>
