@@ -113,8 +113,3 @@ class DetalleOrden(models.Model):
     
     
     
-    
-    
-    
-
-
