@@ -1,3 +1,6 @@
+import datetime
+import json
+from django.db import transaction
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Categoria, Proveedor, Clientes, Producto, OrdenCli, DetalleOrden
@@ -48,6 +51,7 @@ def list_productos(request):
         for prod in productos
     ]
     return JsonResponse(data, safe=False)
+
 @require_http_methods(["GET"])
 def list_ordenes(request):
     ordenes = OrdenCli.objects.all()
@@ -221,7 +225,6 @@ def add_producto(request):
             prod_stock=request.POST.get('prod_stock'),
             prod_imagen=request.FILES.get('prod_imagen'),
             fk_categoria_id=Categoria.objects.get(categoria_id=get_categoria_id_by_name(request.POST.get('categoria_descripcion'))),
-            #fk_prov_id=Proveedor.objects.get(prov_id = get_current_proveedor_id())
             fk_prov_id=Proveedor.objects.get(prov_id = request.POST.get('fk_prov_id'))
         )
         producto.save()
@@ -232,3 +235,64 @@ def add_producto(request):
         return JsonResponse({"status": "error", "message": "Error al agregar producto: " + str(e)})
 
 
+#-----------------Crear ordenes y detalle ordenes-------------------------------------------
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_order(request):
+    try:
+        data = json.loads(request.body)
+        cli_cedula = data.get('cli_cedula')
+        productos = data.get('productos')  # Lista de diccionarios con 'prod_id' y 'cantidad'
+
+        if not cli_cedula or not productos:
+            return JsonResponse({"status": "error", "message": "Datos incompletos"}, status=400)
+
+        cliente = Clientes.objects.get(cli_cedula=cli_cedula)
+
+        total = 0
+        detalles = []
+
+        # Verificar stock y calcular total
+        for item in productos:
+            prod_id = item.get('prod_id')
+            cantidad = item.get('cantidad')
+
+            producto = Producto.objects.get(prod_id=prod_id)
+
+            if producto.prod_stock < cantidad:
+                return JsonResponse({"status": "error", "message": f"Stock insuficiente para el producto {producto.prod_descripcion}"}, status=400)
+
+            total += producto.prod_precio_unitario * cantidad
+            detalles.append((producto, cantidad))
+
+        # Crear orden y detalles dentro de una transacción
+        with transaction.atomic():
+            orden = OrdenCli(
+                orden_fecha=datetime.date.today(),
+                orden_total=total,
+                fk_cli_cedula=cliente
+            )
+            orden.save()
+
+            for producto, cantidad in detalles:
+                detalle = DetalleOrden(
+                    detalle_id=DetalleOrden.objects.filter(fk_orden_id=orden).count() + 1,
+                    detalle_cantidad=cantidad,
+                    detalle_precio=producto.prod_precio_unitario,
+                    fk_orden_id=orden,
+                    fk_prod_id=producto
+                )
+                detalle.save()
+
+                # Reducir stock del producto
+                producto.prod_stock -= cantidad
+                producto.save()
+
+        return JsonResponse({"status": "success", "message": "Orden creada exitosamente"}, status=201)
+
+    except Clientes.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Cliente no encontrado"}, status=404)
+    except Producto.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Producto no encontrado"}, status=404)
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)

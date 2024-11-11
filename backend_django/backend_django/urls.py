@@ -37,4 +37,5 @@ urlpatterns = [
     path('add_proveedor/', views.add_proveedor, name='add_proveedor'),
     path('add_categoria/', views.add_categoria, name='add_categoria'),
     path('add_producto/', views.add_producto, name='add_producto'),
+    path('create_order/', views.create_order, name='create_order'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
