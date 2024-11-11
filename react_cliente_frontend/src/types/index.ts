@@ -1,12 +1,12 @@
 //* Modelos de Base de Datos
 export type Clientes = {
-    cli_cedula: string
-    cli_nombre: string
-    cli_apellido: string
-    cli_correo: string
-    cli_celular: string
-    cli_direccion: string
-    cli_contrasenia: string
+    cli_cedula: string //✔️
+    cli_nombre: string // ✔️
+    cli_apellido: string //✔️
+    cli_correo: string //✔️
+    cli_celular: string // 
+    cli_direccion: string // ✔️
+    cli_contrasenia: string //✔️
 }
 
 export type Categorias = {

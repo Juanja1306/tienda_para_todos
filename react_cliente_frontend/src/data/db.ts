@@ -42,3 +42,10 @@ export const dbProductos: Productos[] = [
         fk_pro_provid: dbProveedores[0].prov_id
     }
 ]
+
+/**@description objeto para redireccionar las páginas */
+export const allRoutesComponents = {
+    storeProducts: 'home',
+    login: 'login',
+    signUp: 'signUp'
+}

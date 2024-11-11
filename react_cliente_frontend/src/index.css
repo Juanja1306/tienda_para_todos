@@ -198,6 +198,167 @@ nav {
   margin-top: 3rem; 
 }
 
+/* MAIN LOGIN */
+.main__background__form{
+  width: 90%;
+  margin: auto;
+  margin-bottom: 5rem;  
+}
+
+.background__camp{
+  max-width: 768px;
+  margin: 4rem auto;
+  padding: 2rem;  
+  background-color: var(--white);
+  border-radius: .8rem;
+  box-shadow: 0px 14px 21px 5px rgba(0, 0, 0, 0.39);
+}
+
+/* FORM Component */
+/** FORMULARY */
+fieldset{
+  border: none;
+  padding: 2.5rem;
+}
+.cont__camp{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.camp__cont__img{
+  opacity: 0;
+  height: 0;
+}
+
+.camp__inputs { 
+
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+}
+
+.camp__title{
+  font-size: 2.6rem;
+  color: var(--marine-blue);
+}
+
+.camp{
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+.camp label{
+  display: inline;
+  color: var(--marine-blue);
+
+  font-family: var(--ubuntu);
+  
+}
+.camp__txt{
+  width: 60%;  
+  padding: .5rem;
+
+  color: var(--marine-blue);
+  border: solid .1rem var(--pastel-blue);
+  border-radius: .5rem;
+
+}
+
+
+.camp__cont__cb{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  margin-right: 10%;
+}
+
+.camp__cb{
+  width: 35%;
+  max-width: 15rem;
+  padding: .7rem;
+
+  text-align: center;
+
+  color: var(--marine-blue);
+  border: solid .1rem var(--pastel-blue);
+  border-radius: .5rem;  
+}
+
+.camp__cb:hover{
+  cursor: pointer;
+  color: var(--white);
+  background-color: var(--pastel-blue);
+}
+
+.camp__cb:focus{
+  border-color: var(--marine-blue);
+}
+
+.camp__button{
+  display: flex;  
+  align-items: center;
+  margin-right: 10%;
+}
+
+.button{
+  width: 35%;
+  max-width: 15rem;
+  padding: 1rem;
+
+  border: none;
+  font-family: var(--ubuntu);
+  font-weight: 500;
+  border-radius: .7rem;
+
+  color: var(--white);
+  background-color: var(--purplish-blue);
+
+  transition:background-color .3s ease, transform .3s ease ;
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: var(--marine-blue);
+
+  transform: scale(1.075);
+}
+
+.button:disabled{
+  opacity: .3;
+  cursor: default;
+  transform: none;  
+}
+
+@media (min-width: 600px) {
+   
+  
+  .cont__camp{
+    flex-direction: row;
+    gap: 2rem;
+  }  
+  
+  .camp__cont__img{
+    opacity: 1;
+    height: 100%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .camp__img{    
+    width: auto;
+    max-width: 100%;
+    
+    height: auto;
+  }
+}
+
 
 /* productos Card Component */
 .productos-card {
