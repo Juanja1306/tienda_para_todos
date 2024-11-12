@@ -229,45 +229,6 @@ def add_categoria(request):
     except Exception as e:
         return JsonResponse({"status": "error", "message": "Error al agregar categoria: " + str(e)})
       
-#--------------Productos--------------------------------------------------
-#Funcion para aniadir productos
-@method_decorator(csrf_exempt, name='dispatch')
-def add_producto(request):
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            prod_id = data.get('prod_id')
-            fk_categoria_id = data.get('fk_categoria_id')
-            fk_prov_id = data.get('fk_prov_id')
-            prod_descripcion = data.get('prod_descripcion')
-            prod_precio_unitario = data.get('prod_precio_unitario')
-            prod_stock = data.get('prod_stock')
-            prod_imagen = data.get('prod_imagen')
-
-            categoria = Categoria.objects.get(pk=fk_categoria_id)
-            proveedor = Proveedor.objects.get(pk=fk_prov_id)
-
-            producto = Producto(
-                prod_id=prod_id,
-                fk_categoria_id=categoria,
-                fk_prov_id=proveedor,
-                prod_descripcion=prod_descripcion,
-                prod_precio_unitario=prod_precio_unitario,
-                prod_stock=prod_stock,
-                prod_imagen=prod_imagen
-            )
-            producto.save()
-
-            return JsonResponse({'message': 'Producto agregado exitosamente'}, status=201)
-        except Categoria.DoesNotExist:
-            return JsonResponse({'error': 'Categoría no encontrada'}, status=404)
-        except Proveedor.DoesNotExist:
-            return JsonResponse({'error': 'Proveedor no encontrado'}, status=404)
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
-    else:
-        return JsonResponse({'error': 'Método no permitido'}, status=405)
-
 #-----------------Crear ordenes y detalle ordenes-------------------------------------------
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -389,5 +350,39 @@ def productos_vendidos_por_categoria(request, categoria_id):
         return JsonResponse(data, safe=False)
     except Categoria.DoesNotExist:
         return JsonResponse({"status": "error", "message": "Categoria no encontrada"}, status=404)
+    except Exception as e:
+        return JsonResponse({"status": "error", "message": str(e)}, status=500)
+    
+#--------------Productos--------------------------------------------------
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def create_producto(request):
+    try:
+        data = json.loads(request.body)
+        prod_descripcion = data.get('prod_descripcion')
+        prod_stock = data.get('prod_stock')
+        prod_precio_unitario = data.get('prod_precio_unitario')
+        fk_categoria_id = data.get('fk_categoria_id')
+        fk_prov_id = data.get('fk_prov_id')
+        prod_imagen = data.get('prod_imagen')
+
+        if not prod_descripcion or not prod_stock or not prod_precio_unitario or not fk_categoria_id or not fk_prov_id:
+            return JsonResponse({"status": "error", "message": "Datos incompletos"}, status=400)
+
+        producto = Producto(
+            prod_descripcion=prod_descripcion,
+            prod_stock=prod_stock,
+            prod_precio_unitario=prod_precio_unitario,
+            fk_categoria_id=Categoria.objects.get(categoria_id=fk_categoria_id),
+            fk_prov_id=Proveedor.objects.get(prov_id=fk_prov_id),
+            prod_imagen=prod_imagen
+        )
+        producto.save()
+        return JsonResponse({"status": "success", "message": "Producto creado exitosamente"}, status=201)
+    except Categoria.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Categoria no encontrada"}, status=404)
+    except Proveedor.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Proveedor no encontrado"}, status=404)
     except Exception as e:
         return JsonResponse({"status": "error", "message": str(e)}, status=500)

@@ -1,4 +1,4 @@
-python manage.py runserver
+python manage.py runserver
 
 Cambiar el volumen en docker-compose.yml
 

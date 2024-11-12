@@ -11,7 +11,7 @@ class Categoria(models.Model):
         db_table = 'categorias'
 
     def __str__(self):
-        return self.categoria_descripcion
+        return self.cat_descripcion
 
 # Modelo Proveedores
 class Proveedor(models.Model):
@@ -63,17 +63,16 @@ class Producto(models.Model):
     prod_id = models.AutoField(primary_key=True)
     
     prod_descripcion = models.CharField(max_length=200)
-    prod_precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     prod_stock = models.IntegerField()
-    prod_imagen = models.TextField(null=True, blank=True)
-
+    prod_imagen = models.TextField()
+    prod_precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)  # Agregar este campo
     
     fk_categoria_id = models.ForeignKey(Categoria, on_delete=models.CASCADE, db_column='fk_categoria_id')
     fk_prov_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='fk_prov_id')
-
+    
     class Meta:
         db_table = 'productos'
-
+    
     def __str__(self):
         return self.prod_descripcion
 

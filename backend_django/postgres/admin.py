@@ -15,7 +15,7 @@ class ClientesAdmin(admin.ModelAdmin):
 
 @admin.register(Producto)
 class ProductoAdmin(admin.ModelAdmin):
-    list_display = ('prod_id', 'prod_descripcion', 'prod_precio_unitario', 'prod_stock', 'prod_imagen', 'fk_categoria_id', 'fk_prov_id')
+    list_display = ('prod_id', 'prod_descripcion', 'prod_precio_unitario', 'prod_stock', 'fk_categoria_id', 'fk_prov_id')
 
 @admin.register(OrdenCli)
 class OrdenCliAdmin(admin.ModelAdmin):
