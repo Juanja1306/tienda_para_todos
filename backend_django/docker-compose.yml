@@ -1,0 +1,67 @@
+services:
+  
+  db_postgres:
+    image: postgres:latest
+    container_name: postgres_db_new
+    environment:
+      POSTGRES_DB: probando
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: probando
+      TZ:  America/Guayaquil
+    ports:
+      - "5433:5432"
+    networks:
+      - datalogger_net
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  admin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: info@jasoft.ec
+      PGADMIN_DEFAULT_PASSWORD: clave
+      TZ:  America/Guayaquil
+    ports:
+      - 5050:80
+    depends_on:
+      - db_postgres
+    networks:
+      - datalogger_net
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_backend
+    ports:
+      - "8001:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend_django.settings
+      - POSTGRES_DB=probando
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=probando
+      - POSTGRES_HOST=db_postgres
+      - DJANGO_SUPERUSER_USERNAME=admin
+      - DJANGO_SUPERUSER_EMAIL=admin@example.com
+      - DJANGO_SUPERUSER_PASSWORD=admin123
+    depends_on:
+      - db_postgres
+      - admin
+    restart: on-failure
+    networks:
+      - datalogger_net
+    command: >
+      sh -c "python manage.py migrate &&
+      python manage.py shell < create_superuser.py &&
+      python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: C:/Users/juanj/Desktop/datapg
+
+networks:
+  datalogger_net:

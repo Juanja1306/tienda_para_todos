@@ -116,14 +116,16 @@ def list_productos_by_proveedor(request, proveedorid):
         return JsonResponse(data, safe=False)
     except Proveedor.DoesNotExist:
         return JsonResponse({"error": "Proveedor no encontrado"}, status=404)
+    
 #-------Funciones para loguear y aniadir clientes/proveedores-------------
 #Funcion para loguear clientes
 @csrf_exempt
 @require_http_methods(["POST"])
 def login_clientes(request):
     try:
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        data = json.loads(request.body)
+        email = data.get('email')
+        password = data.get('password')
             
         try:
             user = Clientes.objects.get(cli_correo=email)
@@ -142,8 +144,9 @@ def login_clientes(request):
 @require_http_methods(["POST"])
 def login_proveedores(request):
     try:
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+        data = json.loads(request.body)
+        email = data.get('email')
+        password = data.get('password')
         
         try:
             user = Proveedor.objects.get(prov_correo=email)
@@ -164,39 +167,43 @@ def login_proveedores(request):
 @require_http_methods(["POST"])
 def add_cliente(request):
     try:
-        email = request.POST.get('cli_correo')
+        data = json.loads(request.body)
+        email = data.get('cli_correo')
         if Clientes.objects.filter(cli_correo=email).exists():
             return JsonResponse({"status": "error", "message": "Email already exists"})
         
         cliente = Clientes(
-            cli_cedula=request.POST.get('cli_cedula'),
-            cli_nombre=request.POST.get('cli_nombre'),
-            cli_apellido=request.POST.get('cli_apellido'),
+            cli_cedula=data.get('cli_cedula'),
+            cli_nombre=data.get('cli_nombre'),
+            cli_apellido=data.get('cli_apellido'),
             cli_correo=email,
-            cli_celular=request.POST.get('cli_celular'),
-            cli_direccion=request.POST.get('cli_direccion'),
-            cli_contrasenia=make_password(request.POST.get('cli_contrasenia'))
+            cli_celular=data.get('cli_celular'),
+            cli_direccion=data.get('cli_direccion'),
+            cli_contrasenia=make_password(data.get('cli_contrasenia'))
         )
         cliente.save()
         return JsonResponse({"status": "success", "message": "Cliente added successfully"})
     except ValidationError as e:
         return JsonResponse({"status": "error", "message": str(e)})
+    except json.JSONDecodeError:
+        return JsonResponse({"status": "error", "message": "Invalid JSON data"})
 
 #Funcion para aniadir proveedores
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_proveedor(request):
     try:
-        email = request.POST.get('prov_correo')
+        data = json.loads(request.body)
+        email = data.get('prov_correo')
         if Proveedor.objects.filter(prov_correo=email).exists():
             return JsonResponse({"status": "error", "message": "Email already exists"})
 
         proveedor = Proveedor(
-            prov_nombre=request.POST.get('prov_nombre'),
-            prov_numero=request.POST.get('prov_numero'),
+            prov_nombre=data.get('prov_nombre'),
+            prov_numero=data.get('prov_numero'),
             prov_correo=email,
-            prov_contrasenia=make_password(request.POST.get('prov_contrasenia')),
-            prov_direccion=request.POST.get('prov_direccion')
+            prov_contrasenia=make_password(data.get('prov_contrasenia')),
+            prov_direccion=data.get('prov_direccion')
         )
         proveedor.save()
         return JsonResponse({"status": "success", "message": "Proveedor added successfully"})
@@ -210,8 +217,9 @@ def add_proveedor(request):
 @require_http_methods(["POST"])
 def add_categoria(request):
     try:
+        data = json.loads(request.body)  # Parse JSON data
         categoria = Categoria(
-            categoria_descripcion=request.POST.get('categoria_descripcion')
+            categoria_descripcion=data.get('categoria_descripcion')
         )
         categoria.save()
         return JsonResponse({"status": "success", "message": "Categoria added successfully"})
@@ -219,20 +227,22 @@ def add_categoria(request):
         return JsonResponse({"status": "error", "message": str(e)})
     except Exception as e:
         return JsonResponse({"status": "error", "message": "Error al agregar categoria: " + str(e)})
-
+      
 #--------------Productos--------------------------------------------------
 #Funcion para aniadir productos
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_producto(request):
     try:
+        data = request.POST
+        imagen = request.FILES.get('prod_imagen')
         producto = Producto(
-            prod_descripcion=request.POST.get('prod_descripcion'),
-            prod_precio_unitario=request.POST.get('prod_precio_unitario'),
-            prod_stock=request.POST.get('prod_stock'),
-            prod_imagen=request.FILES.get('prod_imagen'),
-            fk_categoria_id=Categoria.objects.get(categoria_id=get_categoria_id_by_name(request.POST.get('categoria_descripcion'))),
-            fk_prov_id=Proveedor.objects.get(prov_id = request.POST.get('fk_prov_id'))
+            prod_descripcion=data.get('prod_descripcion'),
+            prod_precio_unitario=data.get('prod_precio_unitario'),
+            prod_stock=data.get('prod_stock'),
+            prod_imagen=imagen,
+            fk_categoria_id=Categoria.objects.get(categoria_id=data.get('fk_categoria_id')),
+            fk_prov_id=Proveedor.objects.get(prov_id=data.get('fk_prov_id'))
         )
         producto.save()
         return JsonResponse({"status": "success", "message": "Producto added successfully"})
@@ -240,7 +250,7 @@ def add_producto(request):
         return JsonResponse({"status": "error", "message": str(e)})
     except Exception as e:
         return JsonResponse({"status": "error", "message": "Error al agregar producto: " + str(e)})
-
+    
 
 #-----------------Crear ordenes y detalle ordenes-------------------------------------------
 @csrf_exempt
