@@ -132,7 +132,7 @@ def login_clientes(request):
             user = Clientes.objects.get(cli_correo=cli_correo)
                 
             if check_password(cli_contrasenia, user.cli_contrasenia):
-                return JsonResponse({"status": "success", "user_type": "Cliente", "cli_cedula": user.cli_cedula})
+                return JsonResponse({"status": "success", "user_type": "Cliente", "cli_cedula": user.cli_cedula, "cli_nombre": user.cli_nombre, "cli_apellido": user.cli_apellido, "cli_correo": user.cli_correo, "cli_celular": user.cli_celular, "cli_direccion": user.cli_direccion})
         except Clientes.DoesNotExist:
             pass
             
@@ -153,7 +153,7 @@ def login_proveedores(request):
             user = Proveedor.objects.get(prov_correo=prov_correo)
             
             if check_password(prov_contrasenia, user.prov_contrasenia):
-                return JsonResponse({"status": "success", "user_type": "Proveedor", "prov_id": user.prov_id})
+                return JsonResponse({"status": "success", "user_type": "Proveedor", "prov_id": user.prov_id, "prov_correo": user.prov_correo, "prov_nombre": user.prov_nombre, "prov_direccion": user.prov_direccion, "prov_numero": user.prov_numero})
             else:
                 print("Contraseña incorrecta")
         except Proveedor.DoesNotExist:
