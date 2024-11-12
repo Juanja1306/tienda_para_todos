@@ -1,61 +1,75 @@
 
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom"
 import Header from "./components/Header"
-import ProductosComponent from "./components/ProductosComponent"
-import { dbProductos } from "./data/db"
+//import ProductosComponent from "./components/ProductosComponent"
+import { allRoutesComponents, dbProductos } from "./data/db"
 import { useCart } from "./hooks/useCart"
+import { useClient } from "./hooks/useClient"
 //import { useFetchProductos } from "./hooks/useFetchProductos"
-
-
+import StoreProducts from "./pages/StoreProducts"
+import Login from "./pages/Login"
+import SignUp from "./pages/SignUp"
 
 
 function App() {
 
-  //const { productos } = useFetchProductos()
+  const { cliente, handleChange, handleSubmit, isValidForm } = useClient()
   const { cart, addToCart, removeProductCart, increaseProduct, decreaseProduct, removeCart, isEmpty, cartTotal } = useCart()
 
+  const navigate = useNavigate()
   return (
-    <>
-      <Header 
-        cart={cart}
-        isEmpty={isEmpty}
-        cartTotal={cartTotal}
-        removeProductCart={removeProductCart}
-        increaseProduct={increaseProduct}
-        decreaseProduct={decreaseProduct}
-        removeCart={removeCart}
-      />
-      <main className="main-container">
-        <h2 className="main-container__title">Nuestros Productos</h2>
+    <div>
 
-        <div className="main-container__grid">
-          {
-            /*productos.map(producto => (
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <Header
+          cart={cart}
+          isEmpty={isEmpty}
+          cartTotal={cartTotal}
+          removeProductCart={removeProductCart}
+          increaseProduct={increaseProduct}
+          decreaseProduct={decreaseProduct}
+          removeCart={removeCart}
+          cliente={cliente}
+        />
 
-              <ProductosComponent
-                key={producto.pro_id}
-                producto={producto}
+        <Routes>
+          <Route path={`/${allRoutesComponents.login}`}
+            element={
+              <Login
+                cliente={cliente}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                isValidForm={isValidForm}
               />
+            }>
+          </Route>
 
-            ))*/
+          <Route path={`/${allRoutesComponents.signUp}`}
+            element={
+              <SignUp
+                cliente={cliente}
+                handleChange={handleChange}
+                handleSubmit={handleSubmit}
+                isValidForm={isValidForm}
+              />
+            }
+          >
+          </Route>
 
-            dbProductos.map((producto) => (
-              <ProductosComponent
-                key={producto.pro_id}
-                producto={producto}
+          <Route path={`/${allRoutesComponents.storeProducts}`}
+            element={
+              <StoreProducts
                 addToCart={addToCart}
               />
-            ))
-          }
-        </div>
-      </main>
+            }
+          ></Route>
 
-      <footer className="footer">
-        <div className="footer__container">
-          <p className="footer__text">Todos los derechos Reservados</p>
-        </div>
-      </footer>
+        </Routes>
 
-    </>
+      </BrowserRouter>
+
+
+    </div>
   )
 }
 

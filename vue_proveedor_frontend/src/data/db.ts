@@ -1,5 +1,4 @@
-import { Categorias, Clientes, Productos, Proveedores } from "../types";
-
+import type { Clientes, Categorias, Proveedores, Productos } from "@/types"
 
 export const dbClientes: Clientes[] = [
     {
@@ -42,10 +41,3 @@ export const dbProductos: Productos[] = [
         fk_pro_provid: dbProveedores[0].prov_id
     }
 ]
-
-/**@description objeto para redireccionar las páginas */
-export const allRoutesComponents = {
-    storeProducts: 'home',
-    login: 'login',
-    signUp: 'signUp'
-}
