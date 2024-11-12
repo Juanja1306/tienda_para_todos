@@ -3,7 +3,7 @@ from .models import Categoria, Proveedor, Clientes, Producto, OrdenCli, DetalleO
 
 @admin.register(Categoria)
 class CategoriaAdmin(admin.ModelAdmin):
-    list_display = ('categoria_id', 'categoria_descripcion')
+    list_display = ('categoria_id', 'cat_descripcion')
 
 @admin.register(Proveedor)
 class ProveedorAdmin(admin.ModelAdmin):

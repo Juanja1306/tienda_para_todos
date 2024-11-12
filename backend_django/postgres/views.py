@@ -220,7 +220,7 @@ def add_categoria(request):
     try:
         data = json.loads(request.body)  # Parse JSON data
         categoria = Categoria(
-            categoria_descripcion=data.get('cat_descripcion')
+            cat_descripcion=data.get('cat_descripcion')
         )
         categoria.save()
         return JsonResponse({"status": "success", "message": "Categoria added successfully"})
@@ -231,37 +231,42 @@ def add_categoria(request):
       
 #--------------Productos--------------------------------------------------
 #Funcion para aniadir productos
-@csrf_exempt
-@require_http_methods(["POST"])
+@method_decorator(csrf_exempt, name='dispatch')
 def add_producto(request):
-    print("Accediendo a add_producto")
-    try:
-        data = json.loads(request.body)
-        print("Datos recibidos: ", data)
-        
+    if request.method == 'POST':
         try:
-            categoria = Categoria.objects.get(categoria_descripcion=data.get('fk_categoria_id'))
+            data = json.loads(request.body)
+            prod_id = data.get('prod_id')
+            fk_categoria_id = data.get('fk_categoria_id')
+            fk_prov_id = data.get('fk_prov_id')
+            prod_descripcion = data.get('prod_descripcion')
+            prod_precio_unitario = data.get('prod_precio_unitario')
+            prod_stock = data.get('prod_stock')
+            prod_imagen = data.get('prod_imagen')
+
+            categoria = Categoria.objects.get(pk=fk_categoria_id)
+            proveedor = Proveedor.objects.get(pk=fk_prov_id)
+
+            producto = Producto(
+                prod_id=prod_id,
+                fk_categoria_id=categoria,
+                fk_prov_id=proveedor,
+                prod_descripcion=prod_descripcion,
+                prod_precio_unitario=prod_precio_unitario,
+                prod_stock=prod_stock,
+                prod_imagen=prod_imagen
+            )
+            producto.save()
+
+            return JsonResponse({'message': 'Producto agregado exitosamente'}, status=201)
         except Categoria.DoesNotExist:
-            print("Categoria no encontrada")
-            return JsonResponse({"status": "error", "message": "Categoria not found"})
-        
-        producto = Producto(
-            prod_descripcion=data.get('prod_descripcion'),
-            prod_precio_unitario=data.get('prod_precio_unitario'),
-            prod_stock=data.get('prod_stock'),
-            prod_imagen=data.get('prod_imagen'),
-            fk_categoria_id=categoria,
-            fk_prov_id=Proveedor.objects.get(prov_id=data.get('fk_prov_id'))
-        )
-        producto.save()
-        print("Producto guardado exitosamente")
-        return JsonResponse({"status": "success", "message": "Producto added successfully"})
-    except ValidationError as e:
-        print("Error de validación: ", e)
-        return JsonResponse({"status": "error", "message": str(e)})
-    except Exception as e:
-        print("Error al agregar producto: ", e)
-        return JsonResponse({"status": "error", "message": "Error al agregar producto: " + str(e)})
+            return JsonResponse({'error': 'Categoría no encontrada'}, status=404)
+        except Proveedor.DoesNotExist:
+            return JsonResponse({'error': 'Proveedor no encontrado'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+    else:
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
 
 #-----------------Crear ordenes y detalle ordenes-------------------------------------------
 @csrf_exempt
