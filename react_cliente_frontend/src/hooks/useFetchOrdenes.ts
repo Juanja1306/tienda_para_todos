@@ -2,7 +2,7 @@ import { CartItem, OrderProduct, OrderRequest } from "../types"
 
 
 export const useFetchOrdenes = () => {
-    const url_api = 'http://localhost:8001';
+    const url_api = 'http://localhost:8000';
 
     const postOrder = async (cedula: string, cart: CartItem[]) => {
         const myProducts: OrderProduct[] = cart.map(item => ({
