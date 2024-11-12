@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 MEDIA_URL = '/media/'  # URL pública para acceder a los archivos
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Ruta donde se almacenarán los archivos
 
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -45,9 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'postgres', 
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
