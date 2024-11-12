@@ -20,19 +20,19 @@ def home(request):
 @require_http_methods(["GET"])
 def list_categorias(request):
     categorias = Categoria.objects.all()
-    data = [{"id": cat.categoria_id, "descripcion": cat.categoria_descripcion} for cat in categorias]
+    data = [{"categoria_id": cat.categoria_id, "cat_descripcion": cat.cat_descripcion} for cat in categorias]
     return JsonResponse(data, safe=False)
 
 @require_http_methods(["GET"])
 def list_proveedores(request):
     proveedores = Proveedor.objects.all()
-    data = [{"id": prov.prov_id, "nombre": prov.prov_nombre, "Correo": prov.prov_correo, "contrasenia": prov.prov_contrasenia} for prov in proveedores]
+    data = [{"prov_id": prov.prov_id, "prov_nombre": prov.prov_nombre, "prov_correo": prov.prov_correo, "prov_contrasenia": prov.prov_contrasenia, "prov_direccion": prov.prov_direccion} for prov in proveedores]
     return JsonResponse(data, safe=False)
 
 @require_http_methods(["GET"])
 def list_clientes(request):
     clientes = Clientes.objects.all()
-    data = [{"cedula": cli.cli_cedula, "nombre": cli.cli_nombre, "apellido": cli.cli_apellido} for cli in clientes]
+    data = [{"cli_cedula": cli.cli_cedula, "cli_nombre": cli.cli_nombre, "cli_apellido": cli.cli_apellido, "cli_correo": cli.cli_correo} for cli in clientes]
     return JsonResponse(data, safe=False)
 
 @require_http_methods(["GET"])
@@ -40,13 +40,13 @@ def list_productos(request):
     productos = Producto.objects.all()
     data = [
         {
-            "id": prod.prod_id,
-            "descripcion": prod.prod_descripcion,
-            "precio": prod.prod_precio_unitario,
-            "cantidad": prod.prod_stock,
-            "imagen": prod.prod_imagen.url if prod.prod_imagen else None,
-            "categoria": prod.fk_categoria_id.categoria_descripcion,
-            "proveedor": prod.fk_prov_id.prov_nombre
+            "prod_id": prod.prod_id,
+            "prod_descripcion": prod.prod_descripcion,
+            "prod_precio_unitario": prod.prod_precio_unitario,
+            "fk_categoria_id": prod.fk_categoria_id.cat_descripcion,
+            "fk_prov_id": prod.fk_prov_id.prov_nombre,
+            "prod_stock": prod.prod_stock,
+            "imagen": prod.prod_imagen if prod.prod_imagen else None
         }
         for prod in productos
     ]
@@ -55,7 +55,7 @@ def list_productos(request):
 @require_http_methods(["GET"])
 def list_ordenes(request):
     ordenes = OrdenCli.objects.all()
-    data = [{"id": orden.orden_id, "fecha": orden.orden_fecha, "total": orden.orden_total} for orden in ordenes]
+    data = [{"orden_id": orden.orden_id, "orden_fecha": orden.orden_fecha, "orden_total": orden.orden_total, "fk_cli_cedula": orden.fk_cli_cedula.cli_cedula} for orden in ordenes]
     return JsonResponse(data, safe=False)
 
 @require_http_methods(["GET"])
@@ -63,10 +63,11 @@ def list_detalle_ordenes(request):
     detalles = DetalleOrden.objects.all()
     data = [
         {
-            "id": det.detalle_id,
-            "cantidad": det.detalle_cantidad,
-            "precio": det.detalle_precio,
-            "orden": det.fk_orden_id_id  # Accede solo al ID
+            "detalle_id": det.detalle_id,
+            "detalle_cantidad": det.detalle_cantidad,
+            "detalle_precio": det.detalle_precio,
+            "fk_orden_id": det.fk_orden_id.orden_id,
+            "fk_prod_id": det.fk_prod_id.prod_id
         }
         for det in detalles
     ]
@@ -74,19 +75,19 @@ def list_detalle_ordenes(request):
 #-----------------Listamos los productos por categoria------------------
 @csrf_exempt
 @require_http_methods(["GET"])
-def list_productos_by_categoria(request, categoriaid):
+def list_productos_by_categoria(request, categoria_id):
     try:
-        categoria = Categoria.objects.get(categoria_id=categoriaid)
+        categoria = Categoria.objects.get(categoria_id=categoria_id)
         productos = Producto.objects.filter(fk_categoria_id=categoria)
         data = [
             {
-                "id": prod.prod_id,
-                "descripcion": prod.prod_descripcion,
-                "precio": prod.prod_precio_unitario,
-                "cantidad": prod.prod_stock,
-                "imagen": prod.prod_imagen.url if prod.prod_imagen else None,
-                "categoria": prod.fk_categoria_id.categoria_descripcion,
-                "proveedor": prod.fk_prov_id.prov_nombre
+                "prod_id": prod.prod_id,
+                "prod_descripcion": prod.prod_descripcion,
+                "prod_precio_unitario": prod.prod_precio_unitario,
+                "prod_stock": prod.prod_stock,
+                "prod_imagen": prod.prod_imagen if prod.prod_imagen else None,
+                "fk_categoria_id": prod.fk_categoria_id.cat_descripcion,
+                "fk_prov_id": prod.fk_prov_id.prov_id
             }
             for prod in productos
         ]
@@ -97,19 +98,19 @@ def list_productos_by_categoria(request, categoriaid):
 #-----------------Listamos los productos por proovedor------------------
 @csrf_exempt
 @require_http_methods(["GET"])
-def list_productos_by_proveedor(request, proveedorid):
+def list_productos_by_proveedor(request, prov_id):
     try:
-        proveedor = Proveedor.objects.get(prov_id=proveedorid)
+        proveedor = Proveedor.objects.get(prov_id=prov_id)
         productos = Producto.objects.filter(fk_prov_id=proveedor)
         data = [
             {
-                "id": prod.prod_id,
-                "descripcion": prod.prod_descripcion,
-                "precio": prod.prod_precio_unitario,
-                "cantidad": prod.prod_stock,
-                "imagen": prod.prod_imagen.url if prod.prod_imagen else None,
-                "categoria": prod.fk_categoria_id.categoria_descripcion,
-                "proveedor": prod.fk_prov_id.prov_nombre
+                "prod_id": prod.prod_id,
+                "prod_descripcion": prod.prod_descripcion,
+                "prod_precio_unitario": prod.prod_precio_unitario,
+                "prod_stock": prod.prod_stock,
+                "imagen": prod.prod_imagen if prod.prod_imagen else None,
+                "fk_categoria_id": prod.fk_categoria_id.cat_descripcion,
+                "fk_prov_id": prod.fk_prov_id.prov_id
             }
             for prod in productos
         ]
@@ -124,13 +125,13 @@ def list_productos_by_proveedor(request, proveedorid):
 def login_clientes(request):
     try:
         data = json.loads(request.body)
-        email = data.get('email')
-        password = data.get('password')
+        cli_correo = data.get('cli_correo')
+        cli_contrasenia = data.get('cli_contrasenia')
             
         try:
-            user = Clientes.objects.get(cli_correo=email)
+            user = Clientes.objects.get(cli_correo=cli_correo)
                 
-            if check_password(password, user.cli_contrasenia):
+            if check_password(cli_contrasenia, user.cli_contrasenia):
                 return JsonResponse({"status": "success", "user_type": "Cliente", "cli_cedula": user.cli_cedula})
         except Clientes.DoesNotExist:
             pass
@@ -145,13 +146,13 @@ def login_clientes(request):
 def login_proveedores(request):
     try:
         data = json.loads(request.body)
-        email = data.get('email')
-        password = data.get('password')
+        prov_correo = data.get('prov_correo')
+        prov_contrasenia = data.get('prov_contrasenia')
         
         try:
-            user = Proveedor.objects.get(prov_correo=email)
+            user = Proveedor.objects.get(prov_correo=prov_correo)
             
-            if check_password(password, user.prov_contrasenia):
+            if check_password(prov_contrasenia, user.prov_contrasenia):
                 return JsonResponse({"status": "success", "user_type": "Proveedor", "prov_id": user.prov_id})
             else:
                 print("Contraseña incorrecta")
@@ -168,15 +169,15 @@ def login_proveedores(request):
 def add_cliente(request):
     try:
         data = json.loads(request.body)
-        email = data.get('cli_correo')
-        if Clientes.objects.filter(cli_correo=email).exists():
+        cli_correo = data.get('cli_correo')
+        if Clientes.objects.filter(cli_correo=cli_correo).exists():
             return JsonResponse({"status": "error", "message": "Email already exists"})
         
         cliente = Clientes(
             cli_cedula=data.get('cli_cedula'),
             cli_nombre=data.get('cli_nombre'),
             cli_apellido=data.get('cli_apellido'),
-            cli_correo=email,
+            cli_correo=cli_correo,
             cli_celular=data.get('cli_celular'),
             cli_direccion=data.get('cli_direccion'),
             cli_contrasenia=make_password(data.get('cli_contrasenia'))
@@ -194,14 +195,14 @@ def add_cliente(request):
 def add_proveedor(request):
     try:
         data = json.loads(request.body)
-        email = data.get('prov_correo')
-        if Proveedor.objects.filter(prov_correo=email).exists():
+        prov_correo = data.get('prov_correo')
+        if Proveedor.objects.filter(prov_correo=prov_correo).exists():
             return JsonResponse({"status": "error", "message": "Email already exists"})
 
         proveedor = Proveedor(
             prov_nombre=data.get('prov_nombre'),
             prov_numero=data.get('prov_numero'),
-            prov_correo=email,
+            prov_correo=prov_correo,
             prov_contrasenia=make_password(data.get('prov_contrasenia')),
             prov_direccion=data.get('prov_direccion')
         )
@@ -219,7 +220,7 @@ def add_categoria(request):
     try:
         data = json.loads(request.body)  # Parse JSON data
         categoria = Categoria(
-            categoria_descripcion=data.get('categoria_descripcion')
+            categoria_descripcion=data.get('cat_descripcion')
         )
         categoria.save()
         return JsonResponse({"status": "success", "message": "Categoria added successfully"})
@@ -233,14 +234,15 @@ def add_categoria(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_producto(request):
-    print("aacediendo a add_producto")
+    print("Accediendo a add_producto")
     try:
         data = json.loads(request.body)
-        print("data: ", data)
+        print("Datos recibidos: ", data)
         
         try:
-            categoria = Categoria.objects.get(categoria_descripcion=data.get('categoria_descripcion'))
+            categoria = Categoria.objects.get(categoria_descripcion=data.get('fk_categoria_id'))
         except Categoria.DoesNotExist:
+            print("Categoria no encontrada")
             return JsonResponse({"status": "error", "message": "Categoria not found"})
         
         producto = Producto(
@@ -248,16 +250,18 @@ def add_producto(request):
             prod_precio_unitario=data.get('prod_precio_unitario'),
             prod_stock=data.get('prod_stock'),
             prod_imagen=data.get('prod_imagen'),
-            fk_categoria_id=Categoria.objects.get(categoria_id=categoria.categoria_id),
-            fk_prov_id=Proveedor.objects.get(prov_id = data.get('fk_prov_id'))
+            fk_categoria_id=categoria,
+            fk_prov_id=Proveedor.objects.get(prov_id=data.get('fk_prov_id'))
         )
         producto.save()
+        print("Producto guardado exitosamente")
         return JsonResponse({"status": "success", "message": "Producto added successfully"})
     except ValidationError as e:
+        print("Error de validación: ", e)
         return JsonResponse({"status": "error", "message": str(e)})
     except Exception as e:
+        print("Error al agregar producto: ", e)
         return JsonResponse({"status": "error", "message": "Error al agregar producto: " + str(e)})
-
 
 #-----------------Crear ordenes y detalle ordenes-------------------------------------------
 @csrf_exempt
@@ -279,15 +283,15 @@ def create_order(request):
         # Verificar stock y calcular total
         for item in productos:
             prod_id = item.get('prod_id')
-            cantidad = item.get('cantidad')
+            prod_stock = item.get('prod_stock')
 
             producto = Producto.objects.get(prod_id=prod_id)
 
-            if producto.prod_stock < cantidad:
+            if producto.prod_stock < prod_stock:
                 return JsonResponse({"status": "error", "message": f"Stock insuficiente para el producto {producto.prod_descripcion}"}, status=400)
 
-            total += producto.prod_precio_unitario * cantidad
-            detalles.append((producto, cantidad))
+            total += producto.prod_precio_unitario * prod_stock
+            detalles.append((producto, prod_stock))
 
         # Crear orden y detalles dentro de una transacción
         with transaction.atomic():
@@ -298,10 +302,10 @@ def create_order(request):
             )
             orden.save()
 
-            for producto, cantidad in detalles:
+            for producto, prod_stock in detalles:
                 detalle = DetalleOrden(
                     detalle_id=DetalleOrden.objects.filter(fk_orden_id=orden).count() + 1,
-                    detalle_cantidad=cantidad,
+                    detalle_cantidad=prod_stock,
                     detalle_precio=producto.prod_precio_unitario,
                     fk_orden_id=orden,
                     fk_prod_id=producto
@@ -309,7 +313,7 @@ def create_order(request):
                 detalle.save()
 
                 # Reducir stock del producto
-                producto.prod_stock -= cantidad
+                producto.prod_stock -= prod_stock
                 producto.save()
 
         return JsonResponse({"status": "success", "message": "Orden creada exitosamente"}, status=201)
@@ -323,26 +327,26 @@ def create_order(request):
     
 #-----------------Productos vendidos por proveedor-------------------------------------------
 @require_http_methods(["GET"])
-def productos_vendidos_por_proveedor(request, proveedorid):
+def productos_vendidos_por_proveedor(request, prov_id):
     try:
-        proveedor = Proveedor.objects.get(prov_id=proveedorid)
-        productos = Producto.objects.filter(fk_prov_id=proveedor)
+        prov = Proveedor.objects.get(prov_id=prov_id)
+        fk_prov_id = Producto.objects.filter(fk_prov_id=prov)
         productos_vendidos = []
 
-        for producto in productos:
+        for producto in fk_prov_id:
             detalles = DetalleOrden.objects.filter(fk_prod_id=producto)
             cantidad_vendida = sum(detalle.detalle_cantidad for detalle in detalles)
 
             if cantidad_vendida > 0:
                 productos_vendidos.append({
-                    "id": producto.prod_id,
-                    "descripcion": producto.prod_descripcion,
-                    "precio": producto.prod_precio_unitario,
-                    "cantidad_vendida": cantidad_vendida
+                    "prod_id": producto.prod_id,
+                    "prod_descripcion": producto.prod_descripcion,
+                    "prod_precio_unitario": producto.prod_precio_unitario,
+                    "detalle_cantidad": cantidad_vendida
                 })
 
         data = {
-            "proveedor": proveedor.prov_nombre,
+            "prov_id": prov.prov_id,
             "productos_vendidos": productos_vendidos
         }
 
@@ -354,9 +358,9 @@ def productos_vendidos_por_proveedor(request, proveedorid):
     
 #-----------------Productos vendidos por categoria-------------------------------------------
 @require_http_methods(["GET"])
-def productos_vendidos_por_categoria(request, categoriaid):
+def productos_vendidos_por_categoria(request, categoria_id):
     try:
-        categoria = Categoria.objects.get(categoria_id=categoriaid)
+        categoria = Categoria.objects.get(categoria_id=categoria_id)
         productos = Producto.objects.filter(fk_categoria_id=categoria)
         productos_vendidos = []
 
@@ -366,14 +370,14 @@ def productos_vendidos_por_categoria(request, categoriaid):
 
             if cantidad_vendida > 0:
                 productos_vendidos.append({
-                    "id": producto.prod_id,
-                    "descripcion": producto.prod_descripcion,
-                    "precio": producto.prod_precio_unitario,
-                    "cantidad_vendida": cantidad_vendida
+                    "prod_id": producto.prod_id,
+                    "prod_descripcion": producto.prod_descripcion,
+                    "prod_precio_unitario": producto.prod_precio_unitario,
+                    "detalle_cantidad": cantidad_vendida
                 })
 
         data = {
-            "categoria": categoria.categoria_descripcion,
+            "cat_descripcion": categoria.cat_descripcion,
             "productos_vendidos": productos_vendidos
         }
 

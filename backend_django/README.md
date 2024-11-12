@@ -26,3 +26,6 @@ Contraseña: probando
 Para acceder al super usuario de django:
 Usuario: admin
 Contraseña: admin123
+
+
+Obviar los errores, esperar unos 3 a 5 minutos hasta que se inicialice todo

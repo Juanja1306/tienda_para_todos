@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 class Categoria(models.Model):
     categoria_id = models.AutoField(primary_key=True)
     
-    categoria_descripcion = models.CharField(max_length=100)
+    cat_descripcion = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'categorias'
