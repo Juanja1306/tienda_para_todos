@@ -1,29 +1,42 @@
 
 import { useEffect, useState } from "react"
-import { Productos } from "../types"
+import { Categorias, Productos } from "../types"
 
 export const useFetchProductos = () => {
-
-    const url_api = 'http://127.0.0.1:8000/'
+    
+    //TODO: cambiar el puerto al momento de Dockerizar
+    const url_api = 'http://localhost:8001'
     const productosIniciales: Productos[] = []
 
     const [productos, setProducto] = useState(productosIniciales)
 
-    useEffect(() => {
+    const fetchAllProductos = async () => {
+        
+        try {
+            const response = await fetch(`${url_api}/productos/`)
+            if (!response.ok) throw new Error('Error al obtener todos los productos')
+            const products: Productos[] = await response.json()
+            setProducto(products)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-        fetch(`${url_api}/productos/`)
-            .then((response) => response.json())
-            .then((product) => {
-                console.log(product)
-                setProducto([...productos, product])
-            })
-            .catch((error) => 
-                console.error(error)
-            )
-
-    }, [])
+    const fetchProductosByCategoria = async (categoriaId: Categorias['cat_id']) => {
+        
+        try {
+            const response = await fetch(`${url_api}/list_productos_by_categoria/${categoriaId}/`)
+            if (!response.ok) throw new Error(`Error al obtener productos de la categoría ${categoriaId}`)
+            const products: Productos[] = await response.json()
+            setProducto(products)
+        } catch (error) {
+            
+        } 
+    }
 
     return {
-        productos
+        productos,
+        fetchAllProductos,
+        fetchProductosByCategoria
     }
 }

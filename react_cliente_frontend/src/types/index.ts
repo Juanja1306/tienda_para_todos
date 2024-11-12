@@ -24,12 +24,12 @@ export type Proveedores = {
 }
 
 export type Productos = {
-    pro_id: number
-    pro_descripcion: string
-    pro_precio_unitario: number
-    pro_stock: number
+    prod_id: number
+    prod_descripcion: string
+    prod_precio_unitario: number
+    prod_stock: number
     fk_cat_id: Categorias['cat_id']
-    pro_imagen: string
+    prod_imagen: string
     fk_pro_provid: Proveedores['prov_id']
 }
 
@@ -43,13 +43,24 @@ export type Ordenes_Cli = {
 export type Detalle_Ordenes_Cli = {
     detalle_id: number
     fk_orden_id: Ordenes_Cli['orden_id']
-    fk_prod_id: Productos['pro_id']
-    detalle_cantidad: Productos['pro_id']
+    fk_prod_id: Productos['prod_id']
+    detalle_cantidad: Productos['prod_id']
     detalle_precio: number
 }
 
 //* Modelos para la App
-export type CartItem = Pick<Productos, 'pro_id' | 'pro_descripcion' | 'pro_precio_unitario'| 'pro_imagen' | 'fk_cat_id'| 'fk_pro_provid'>  & {
+export type CartItem = Pick<Productos, 'prod_id' | 'prod_descripcion' | 'prod_precio_unitario'| 'prod_imagen' | 'fk_cat_id'| 'fk_pro_provid'>  & {
     cantidad : number
 }
 
+export type OrderProduct = {
+    prod_id: number;
+    prod_stock: number;
+};
+
+export type OrderRequest = {
+    cli_cedula: string;
+    productos: OrderProduct[];
+};
+
+export type Sign = Pick<Clientes, 'cli_correo' | 'cli_contrasenia'>

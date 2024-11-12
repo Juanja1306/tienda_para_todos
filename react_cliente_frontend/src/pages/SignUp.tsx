@@ -1,7 +1,6 @@
 import { ChangeEvent, FormEvent } from "react"
-import { allRoutesComponents } from "../data/db"
 import { Clientes } from "../types"
-import { BrowserRouter } from "react-router-dom"
+
 
 
 

@@ -1,42 +1,44 @@
 
-import Header from "../components/Header"
 import ProductosComponent from "../components/ProductosComponent"
-import { dbProductos } from "../data/db"
-import { useCart } from "../hooks/useCart"
-import { Productos } from "../types"
+import { Categorias, Productos } from "../types"
 
 
 export type StoreProductsProps = {
-  addToCart: (item:Productos) => void
+  addToCart: (item: Productos) => void
+  categorias: Categorias[]
+  productos: Productos[]
+  fetchAllProductos: () => Promise<void>
+  fetchProductosByCategoria: (categoriaId: Categorias["cat_id"]) => Promise<void>
 }
 
-export default function StoreProducts({addToCart}:StoreProductsProps) {
+export default function StoreProducts({ addToCart, categorias, productos = [], fetchAllProductos, fetchProductosByCategoria }: StoreProductsProps) {
 
-  //const { productos } = useFetchProductos()
- // const { cart, addToCart, removeProductCart, increaseProduct, decreaseProduct, removeCart, isEmpty, cartTotal } = useCart()
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedCategoryId = event.target.value;
+    if (selectedCategoryId === "0") {
+      fetchAllProductos(); // Si selecciona "Todos", trae todos los productos
+    } else {
+      fetchProductosByCategoria(Number(selectedCategoryId)); // Si selecciona una categoría, trae los productos de esa categoría
+    }
+  };
 
   return (
     <>
-      {
-        /*
-              <Header
-                cart={cart}
-                isEmpty={isEmpty}
-                cartTotal={cartTotal}
-                removeProductCart={removeProductCart}
-                increaseProduct={increaseProduct}
-                decreaseProduct={decreaseProduct}
-                removeCart={removeCart}
-              />
-              */
-      }
       <main className="main-container">
-        <h2 className="main-container__title">Nuestros Productos</h2>
-
+        <div>
+          <h2 className="main-container__title">Nuestros Productos</h2>
+          <select name="" id="" onChange={handleSelectChange}>
+            <option value="0">Todos</option>
+            {categorias.map((categoria: Categorias) => (
+              <option key={categoria.cat_id} value={categoria.cat_id} >{categoria.cat_descripcion}</option>
+            ))
+            }
+          </select>
+        </div>
         <div className="main-container__grid">
-          {dbProductos.map((producto) => (
+          {productos.map((producto) => (
             <ProductosComponent
-              key={producto.pro_id}
+              key={producto.prod_id}
               producto={producto}
               addToCart={addToCart}
             />
@@ -50,9 +52,6 @@ export default function StoreProducts({addToCart}:StoreProductsProps) {
           <p className="footer__text">Todos los derechos Reservados</p>
         </div>
       </footer>
-
     </>
   )
 }
-
-//export default App

@@ -9,7 +9,7 @@ export const useCart = () => {
         return localStorageCart ? JSON.parse(localStorageCart) : [];
     }
     const [cart, setCart] = useState(inicialCart);
-    const maxProductos = 5;
+    const maxProductos = 35;
     const minProductos = 1
 
     useEffect(() => {
@@ -18,13 +18,13 @@ export const useCart = () => {
 
 
     function addToCart(item: Productos) {
-        const itemExists = cart.findIndex(searchProduct => searchProduct.pro_id === item.pro_id);
+        const itemExists = cart.findIndex(searchProduct => searchProduct.prod_id === item.prod_id);
 
         if (itemExists == -1) {
             const newItem: CartItem = { ...item, cantidad: 1 }
             setCart([...cart, newItem])
 
-            console.log(`Agregando item ${item.pro_descripcion}`)
+            console.log(`Agregando item ${item.prod_descripcion}`)
         } else {
             if (cart[itemExists].cantidad === maxProductos) return
             const updateItemn = [...cart]
@@ -34,22 +34,22 @@ export const useCart = () => {
 
     }
 
-    function removeProductCart(id: Productos['pro_id']) {
-        setCart(prevCart => prevCart.filter(product => product.pro_id !== id))
+    function removeProductCart(id: Productos['prod_id']) {
+        setCart(prevCart => prevCart.filter(product => product.prod_id !== id))
     }
 
-    function increaseProduct(id: Productos['pro_id']) {
+    function increaseProduct(id: Productos['prod_id']) {
 
         const incrementProduct = cart.map(item => {
-            (item.pro_id === id && item.cantidad <= maxProductos) && item.cantidad++
+            (item.prod_id === id && item.cantidad <= maxProductos) && item.cantidad++
             return item
         })
         setCart(incrementProduct)
     }
 
-    function decreaseProduct(id: Productos['pro_id']) {
+    function decreaseProduct(id: Productos['prod_id']) {
         const decrementProduct = cart.map(item => {
-            (item.pro_id === id && item.cantidad > minProductos) && item.cantidad--
+            (item.prod_id === id && item.cantidad > minProductos) && item.cantidad--
             return item
         })
         setCart(decrementProduct)
@@ -59,8 +59,9 @@ export const useCart = () => {
         setCart([])
     }
 
+
     const isEmpty = useMemo(() => cart.length === 0, [cart])
-    const cartTotal = useMemo(() => cart.reduce( (total, item) => total + (item.cantidad * item.pro_precio_unitario),0 ),[cart])
+    const cartTotal = useMemo(() => cart.reduce( (total, item) => total + (item.cantidad * item.prod_precio_unitario),0 ),[cart])
 
     return {
         cart,        

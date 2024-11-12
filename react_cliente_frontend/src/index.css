@@ -144,7 +144,7 @@ nav {
 }
 
 .cart__button {
-  background-color: #343a40;
+  background-color: var(--marine-blue);
   /* Dark button color */
   color: white;
   border: none;
@@ -155,7 +155,7 @@ nav {
 
 .cart__button--decrease,
 .cart__button--increase {
-  background-color: #343a40;
+  background-color: var(--marine-blue);
 }
 
 .cart__button--remove {
@@ -175,6 +175,25 @@ nav {
   font-weight: bold;
 }
 
+.cart__button__total {
+  width: 100%;
+  
+  padding: 0.5rem;
+  
+  margin-top: 1rem;
+  
+  background-color: var(--marine-blue);
+  
+  color: white;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+}
+
+.bt__buy{
+  background-color: #39d737;
+}
 
 .cont__nav__a {
   width: 100%;
@@ -190,21 +209,22 @@ nav {
   font-family: var(--embed_code);
   padding: 1rem;
   border-radius: 0.5rem;
-  transition: background-color .3s ease ;
+  transition: background-color .3s ease;
   padding: 1rem;
 }
 
-.nav__a:hover{
+.nav__a:hover {
   background-color: var(--pastel-blue);
   color: var(--marine-blue);
 }
+
 @media (min-width: 768px) {
   .cont__nav__a {
     width: 40%;
     margin-left: auto;
     flex-direction: row;
     justify-content: space-between;
-    
+
   }
 }
 

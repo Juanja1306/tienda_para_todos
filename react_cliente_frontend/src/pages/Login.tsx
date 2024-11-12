@@ -1,7 +1,5 @@
 import { ChangeEvent, FormEvent } from "react"
 import { Clientes } from "../types"
-import { allRoutesComponents } from "../data/db"
-import { BrowserRouter } from "react-router-dom"
 
 export type LoginProps = {
     cliente: Clientes
@@ -12,6 +10,8 @@ export type LoginProps = {
 
 
 export default function Login({ cliente, handleChange, handleSubmit, isValidForm }: LoginProps) {
+
+    
 
     return (
         <>

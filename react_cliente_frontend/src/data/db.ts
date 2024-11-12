@@ -33,12 +33,12 @@ export const dbProveedores: Proveedores[] = [
 ]
 export const dbProductos: Productos[] = [
     {
-        pro_id: 1,
-        pro_descripcion: 'Guitarra Campbell',
-        pro_precio_unitario: 345,
-        pro_stock: 84,
+        prod_id: 1,
+        prod_descripcion: 'Guitarra Campbell',
+        prod_precio_unitario: 345,
+        prod_stock: 84,
         fk_cat_id: dbCategorias[0].cat_id,
-        pro_imagen: 'guitarra_10',
+        prod_imagen: 'guitarra_10',
         fk_pro_provid: dbProveedores[0].prov_id
     }
 ]
