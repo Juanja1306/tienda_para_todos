@@ -49,10 +49,23 @@ Sigue estos pasos para conectar pgAdmin al contenedor de PostgreSQL:
 Para acceder al panel de administración de Django, utiliza las siguientes credenciales:
 
 
-- **Pagina:** http://localhost:8000/admin/
+- **Pagina:** http://localhost:8001/admin/
 - **Usuario:** `admin`
 - **Contraseña:** `admin123`
 
 ## Notas Importantes
 
 - **Errores iniciales:** Es posible que aparezcan errores al inicio. Puedes ignorarlos y esperar de 3 a 5 minutos hasta que todos los contenedores se inicialicen correctamente.
+
+
+Entrar a portainer:
+
+- **Pagina:** http://localhost:9000/
+- **Usuario:** `admin`
+- **Contraseña:** TLpRjw7pt5s9BeK
+
+Entrar a grafana:
+
+- **Pagina:** http://localhost:3000/
+- **Usuario:** `admin`
+- **Contraseña:** TLpRjw7pt5s9BeK
