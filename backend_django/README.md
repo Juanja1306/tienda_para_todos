@@ -29,8 +29,8 @@ docker compose up --build
 ## Credenciales de Acceso a pgAdmin4
 - **Pagina:** http://localhost:5050/login?next=/
 
-- **Correo Electrónico:** info@jasoft.ec  
-- **Contraseña:** clave  
+- **Correo Electrónico:** `info@jasoft.ec`  
+- **Contraseña:** `clave`  
 
 ### Configuración de la Conexión en pgAdmin
 
@@ -48,6 +48,8 @@ Sigue estos pasos para conectar pgAdmin al contenedor de PostgreSQL:
 
 Para acceder al panel de administración de Django, utiliza las siguientes credenciales:
 
+
+- **Pagina:** http://localhost:8001/admin/
 - **Usuario:** `admin`
 - **Contraseña:** `admin123`
 
