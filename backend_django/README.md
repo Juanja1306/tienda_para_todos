@@ -27,6 +27,7 @@ docker compose up --build
 
 
 ## Credenciales de Acceso a pgAdmin4
+- **Pagina:** http://localhost:5050/login?next=/
 
 - **Correo Electrónico:** info@jasoft.ec  
 - **Contraseña:** clave  
