@@ -31,7 +31,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./backend_django/Dockerfile
     container_name: django_backend
     ports:
       - "8001:8000"
@@ -54,6 +54,16 @@ services:
       sh -c "python manage.py migrate &&
       python manage.py shell < create_superuser.py &&
       python manage.py runserver 0.0.0.0:8000"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./react_cliente_frontend/Dockerfile
+    container_name: react_frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - datalogger_net
 
 volumes:
   postgres_data:
