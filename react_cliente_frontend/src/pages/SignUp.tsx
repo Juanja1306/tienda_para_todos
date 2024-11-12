@@ -1,7 +1,9 @@
 import { ChangeEvent, FormEvent } from "react"
-import { Clientes } from "../types"
 import { allRoutesComponents } from "../data/db"
+import { Clientes } from "../types"
 import { BrowserRouter } from "react-router-dom"
+
+
 
 export type LoginProps = {
     cliente: Clientes
@@ -11,10 +13,13 @@ export type LoginProps = {
 }
 
 
-export default function Login({ cliente, handleChange, handleSubmit, isValidForm }: LoginProps) {
+export default function signUp({ cliente, handleChange, handleSubmit, isValidForm }: LoginProps) {
+
+
 
     return (
         <>
+
             <main className="main__background__form">
                 <div className="background__camp">
                     <form onSubmit={handleSubmit}>
@@ -39,7 +44,7 @@ export default function Login({ cliente, handleChange, handleSubmit, isValidForm
                                 <div className="camp__inputs">
 
                                     <section className="camp__text">
-                                        <h3 className="camp__title">Ingrese su usuario</h3>
+                                        <h3 className="camp__title">Registrese</h3>
                                     </section>
                                     <div className="camp">
                                         <label htmlFor="cli_correo">Correo electrónico </label>
@@ -56,6 +61,44 @@ export default function Login({ cliente, handleChange, handleSubmit, isValidForm
                                             onChange={handleChange} />
                                     </div>
 
+
+
+                                    <div className="camp">
+                                        <label htmlFor="cli_cedula">Cedula </label>
+                                        <input className="camp__txt" type="text" name="cli_cedula" id="cli_cedula" placeholder='Ej: 0125478963'
+                                            value={cliente.cli_cedula}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="camp">
+                                        <label htmlFor="cli_nombre">Nombre </label>
+                                        <input className="camp__txt" type="text" name="cli_nombre" id="cli_nombre" placeholder='Ej: Felipe'
+                                            value={cliente.cli_nombre}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+
+                                    <div className="camp">
+                                        <label htmlFor="cli_apellido">Apellido </label>
+                                        <input className="camp__txt" type="text" name="cli_apellido" id="cli_apellido" placeholder='Ej: Felipe'
+                                            value={cliente.cli_apellido}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="camp">
+                                        <label htmlFor="cli_direccion">Dirección </label>
+                                        <input className="camp__txt" type="text" name="cli_direccion" id="cli_direccion" placeholder='Ej: Felipe'
+                                            value={cliente.cli_direccion}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
+                                    <div className="camp">
+                                        <label htmlFor="cli_celular">Celular </label>
+                                        <input className="camp__txt" type="text" name="cli_celular" id="cli_celular" placeholder='Ej: Felipe'
+                                            value={cliente.cli_celular}
+                                            onChange={handleChange}
+                                        />
+                                    </div>
                                     <div className="camp camp__button">
                                         <button className="button" type="submit" disabled={!isValidForm()}>Ingresar</button>
                                     </div>

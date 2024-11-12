@@ -1,4 +1,4 @@
-import { Dispatch } from "react"
+import { BrowserRouter, Link } from 'react-router-dom'
 import { CartItem, Clientes, Productos } from "../types"
 import { allRoutesComponents } from "../data/db"
 
@@ -11,90 +11,82 @@ type HeaderProps = {
     increaseProduct: (id: Productos["pro_id"]) => void
     decreaseProduct: (id: Productos["pro_id"]) => void
     removeCart: () => void
-    cliente: Clientes
-    setPage: Dispatch<React.SetStateAction<string>>
+    cliente: Clientes    
 }
 
-export default function Header({ cart, isEmpty, cartTotal, removeProductCart, increaseProduct, decreaseProduct, removeCart, cliente, setPage }: HeaderProps) {
-    
-    //TODO: Setearle el tipo de dato al event
-    const toPage = (page: string) => (event: any) => {
-        event.preventDefault()
-        setPage(page)
-    }
+export default function Header({ cart, isEmpty, cartTotal, removeProductCart, increaseProduct, decreaseProduct, removeCart, cliente}: HeaderProps) {   
 
-    return (
-        <header className="header">
-            <div className="cont--h">
-                <div className="cont--header">
-                    <div className="title">
-                        <a href="index.html">
-                            <h1>Tienda Para Todos</h1>
-                        </a>
-                    </div>
-                    <nav>
-                        {cliente.cli_cedula ? (
-                            <div className="carrito">
-                                <img src="/img/carrito.png" alt="carrito" />
+    return (        
+            <header className="header">
+                <div className="cont--h">
+                    <div className="cont--header">
+                        <div className="title">
+                            <a href="index.html">
+                                <h1>Tienda Para Todos</h1>
+                            </a>
+                        </div>
+                        <nav className={cliente.cli_cedula && "cont__nav__a"}>
+                            {cliente.cli_cedula ? (
+                                <div className="carrito">
+                                    <img src="/img/carrito.png" alt="carrito" />
 
-                                <div id="carrito">
-                                    {isEmpty ? (<p className="cart__empty-message">El carrito esta vacio</p>) : (
-                                        <>
-                                            <table className="cart__table">
-                                                <thead>
-                                                    <tr className="cart__header-row">
-                                                        <th className="" >Imagen</th>
-                                                        <th className="" >Nombre</th>
-                                                        <th className="" >Precio</th>
-                                                        <th className="" >Cantidad</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {cart.map(product => (
-                                                        <tr className="cart__row" key={product.pro_id}>
-                                                            <td className="cart__image-cell">
-                                                                <img className="cart__image" src={`/img/${product.pro_imagen}.jpg`} alt="imagen_producto" />
-                                                            </td>
-                                                            <td className="cart__name">{product.pro_descripcion}</td>
-                                                            <td className="cart__price">{product.pro_precio_unitario}</td>
-                                                            <td className="cart__quantity">
-                                                                <button className="cart__button cart__button--decrease" type="button" onClick={() => decreaseProduct(product.pro_id)}>
-                                                                    -
-                                                                </button>
-                                                                {product.cantidad}
-
-                                                                <button type="button" className="cart__button cart__button--increase" onClick={() => increaseProduct(product.pro_id)}>
-                                                                    +
-                                                                </button>
-                                                            </td>
-                                                            <td className="cart__remove-cell">
-                                                                <button className="cart__button cart__button--remove" type="button" onClick={() => removeProductCart(product.pro_id)}>
-                                                                    X
-                                                                </button>
-                                                            </td>
+                                    <div id="carrito">
+                                        {isEmpty ? (<p className="cart__empty-message">El carrito esta vacio</p>) : (
+                                            <>
+                                                <table className="cart__table">
+                                                    <thead>
+                                                        <tr className="cart__header-row">
+                                                            <th className="" >Imagen</th>
+                                                            <th className="" >Nombre</th>
+                                                            <th className="" >Precio</th>
+                                                            <th className="" >Cantidad</th>
                                                         </tr>
-                                                    ))
-                                                    }
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        {cart.map(product => (
+                                                            <tr className="cart__row" key={product.pro_id}>
+                                                                <td className="cart__image-cell">
+                                                                    <img className="cart__image" src={`/img/${product.pro_imagen}.jpg`} alt="imagen_producto" />
+                                                                </td>
+                                                                <td className="cart__name">{product.pro_descripcion}</td>
+                                                                <td className="cart__price">{product.pro_precio_unitario}</td>
+                                                                <td className="cart__quantity">
+                                                                    <button className="cart__button cart__button--decrease" type="button" onClick={() => decreaseProduct(product.pro_id)}>
+                                                                        -
+                                                                    </button>
+                                                                    {product.cantidad}
 
-                                            <p className="text-end">Total pagar: <span className="fw-bold">${cartTotal}</span></p>
-                                        </>
-                                    )}
-                                    <button className="btn btn-dark w-100 mt-3 p-2" onClick={removeCart}>Vaciar Carrito</button>
+                                                                    <button type="button" className="cart__button cart__button--increase" onClick={() => increaseProduct(product.pro_id)}>
+                                                                        +
+                                                                    </button>
+                                                                </td>
+                                                                <td className="cart__remove-cell">
+                                                                    <button className="cart__button cart__button--remove" type="button" onClick={() => removeProductCart(product.pro_id)}>
+                                                                        X
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        ))
+                                                        }
+                                                    </tbody>
+                                                </table>
+
+                                                <p className="text-end">Total pagar: <span className="fw-bold">${cartTotal}</span></p>
+                                            </>
+                                        )}
+                                        <button className="btn btn-dark w-100 mt-3 p-2" onClick={removeCart}>Vaciar Carrito</button>
+                                    </div>
                                 </div>
-                            </div>
-                        ) : (
-                            <>
-                                <a onClick={toPage(allRoutesComponents.storeProducts)} href="#">Home</a>
-                                <a onClick={toPage(allRoutesComponents.login)} href="#">Login</a>
-                                <a onClick={toPage(allRoutesComponents.signUp)} href="#">Registrarse</a>
-                            </>
-                        )
-                        }
-                    </nav>
+                            ) : (
+                                <>
+                                    <Link className="nav__a" to={`/${allRoutesComponents.login}`}>Login</Link>
+                                    <Link className="nav__a" to={`/${allRoutesComponents.signUp}`}>Registrarse</Link>
+                                </>
+                            )
+                            }
+                        </nav>
+                    </div>
                 </div>
-            </div>
-        </header>
+            </header>        
     )
 }
