@@ -1,13 +1,6 @@
 
 # Guía de Configuración del Proyecto
 
-## Iniciar el Servidor de Desarrollo
-
-Ejecuta el siguiente comando para iniciar el servidor de Django:
-```bash
-python manage.py runserver
-```
-
 ## Configuración del Volumen en Docker
 
 En el archivo `docker-compose.yml`, ajusta el volumen para almacenar la base de datos en tu PC local:
@@ -23,6 +16,15 @@ volumes:
 ```
 
 Reemplaza `device: C:/Users/juanj/Desktop/datapg` por una ruta en tu sistema donde se almacenarán los datos de PostgreSQL.
+
+
+## Iniciar el Servidor de Desarrollo
+
+Ejecuta el siguiente comando para iniciar el servidor de Django:
+```bash
+docker compose up --build
+```
+
 
 ## Credenciales de Acceso a pgAdmin4
 
