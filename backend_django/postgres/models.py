@@ -65,7 +65,8 @@ class Producto(models.Model):
     prod_descripcion = models.CharField(max_length=200)
     prod_precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     prod_stock = models.IntegerField()
-    prod_imagen = models.ImageField(upload_to='productos/', null=True, blank=True)
+    prod_imagen = models.TextField(null=True, blank=True)
+
     
     fk_categoria_id = models.ForeignKey(Categoria, on_delete=models.CASCADE, db_column='fk_categoria_id')
     fk_prov_id = models.ForeignKey(Proveedor, on_delete=models.CASCADE, db_column='fk_prov_id')

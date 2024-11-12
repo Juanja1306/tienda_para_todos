@@ -30,8 +30,9 @@ ALLOWED_HOSTS = []
 
 
 
-MEDIA_URL = '/media/'  # URL pública para acceder a los archivos
+"""MEDIA_URL = '/media/'  # URL pública para acceder a los archivos
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Ruta donde se almacenarán los archivos
+"""
 
 CORS_ALLOW_ALL_ORIGINS = True
 

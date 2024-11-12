@@ -233,16 +233,23 @@ def add_categoria(request):
 @csrf_exempt
 @require_http_methods(["POST"])
 def add_producto(request):
+    print("aacediendo a add_producto")
     try:
-        data = request.POST
-        imagen = request.FILES.get('prod_imagen')
+        data = json.loads(request.body)
+        print("data: ", data)
+        
+        try:
+            categoria = Categoria.objects.get(categoria_descripcion=data.get('categoria_descripcion'))
+        except Categoria.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Categoria not found"})
+        
         producto = Producto(
             prod_descripcion=data.get('prod_descripcion'),
             prod_precio_unitario=data.get('prod_precio_unitario'),
             prod_stock=data.get('prod_stock'),
-            prod_imagen=imagen,
-            fk_categoria_id=Categoria.objects.get(categoria_id=data.get('fk_categoria_id')),
-            fk_prov_id=Proveedor.objects.get(prov_id=data.get('fk_prov_id'))
+            prod_imagen=data.get('prod_imagen'),
+            fk_categoria_id=Categoria.objects.get(categoria_id=categoria.categoria_id),
+            fk_prov_id=Proveedor.objects.get(prov_id = data.get('fk_prov_id'))
         )
         producto.save()
         return JsonResponse({"status": "success", "message": "Producto added successfully"})
@@ -250,7 +257,7 @@ def add_producto(request):
         return JsonResponse({"status": "error", "message": str(e)})
     except Exception as e:
         return JsonResponse({"status": "error", "message": "Error al agregar producto: " + str(e)})
-    
+
 
 #-----------------Crear ordenes y detalle ordenes-------------------------------------------
 @csrf_exempt
