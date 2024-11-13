@@ -89,6 +89,18 @@ services:
     networks:
       - datalogger_net
 
+  ssh_server:
+    image: rastasheep/ubuntu-sshd:latest
+    container_name: ssh_server
+    environment:
+      - SSH_USER=usuario
+      - SSH_PASSWORD=contra0000
+    ports:
+      - "2222:22"
+    networks:
+      - datalogger_net
+    restart: unless-stopped
+
 
 volumes:
   postgres_data:
