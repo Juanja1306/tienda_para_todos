@@ -1,7 +1,7 @@
 
 # Guía de Configuración del Proyecto
 
-## Configuración del Volumen en Docker
+## Configuración de los Volumenes en Docker
 
 En el archivo `docker-compose.yml`, ajusta los volumenes para almacenar la base de datos en tu PC local, por ejemplo:
 
@@ -77,10 +77,10 @@ Para acceder al panel de administración de Django, utiliza las siguientes crede
 
 
 ## Conectarse al contenedor SSH
-- `ssh root@localhost -p 2222`
-  
-### Ingresar la contraseña de SSH cuando se solicite
-- `root`
+
+
+- **Usuario:** `ssh root@localhost -p 2222`
+- **Contraseña:** `root`
 
 ### Instalar las dependencias necesarias (solo si es la primera vez)
 - `apt update`
