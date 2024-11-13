@@ -20,7 +20,7 @@ def home(request):
 @require_http_methods(["GET"])
 def list_categorias(request):
     categorias = Categoria.objects.all()
-    data = [{"categoria_id": cat.categoria_id, "cat_descripcion": cat.cat_descripcion} for cat in categorias]
+    data = [{"cat_id": cat.categoria_id, "cat_descripcion": cat.cat_descripcion} for cat in categorias]
     return JsonResponse(data, safe=False)
 
 @require_http_methods(["GET"])
