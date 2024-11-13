@@ -58,19 +58,19 @@ Para acceder al panel de administración de Django, utiliza las siguientes crede
 - **Errores iniciales:** Es posible que aparezcan errores al inicio. Puedes ignorarlos y esperar de 3 a 5 minutos hasta que todos los contenedores se inicialicen correctamente.
 
 
-Entrar a portainer:
+## Entrar a portainer:
 
 - **Pagina:** http://localhost:9000/
 - **Usuario:** `admin`
 - **Contraseña:** TLpRjw7pt5s9BeK
 
-Entrar a grafana:
+## Entrar a grafana:
 
 - **Pagina:** http://localhost:3000/
 - **Usuario:** `admin`
 - **Contraseña:** TLpRjw7pt5s9BeK
 
-Entrar a Netdata
+## Entrar a Netdata
 
 - **Pagina:** http://localhost:19999/
 - **Entrar en:** Skip and use the dashboard anonymously.
@@ -78,22 +78,31 @@ Entrar a Netdata
 
 ## Conectarse al contenedor SSH
 - `ssh root@localhost -p 2222`
-## Ingresar la contraseña de SSH cuando se solicite
+  
+ Ingresar la contraseña de SSH cuando se solicite
 - `root`
-## Instalar las dependencias necesarias (solo si es la primera vez)
+
+ Instalar las dependencias necesarias (solo si es la primera vez)
 - `apt update`
 - `apt install -y postgresql-client`
-## Conectarse a PostgreSQL
+  
+ Conectarse a PostgreSQL
 - `psql -h postgres_db_new -U postgres -d probando`
-## Ingresar la contraseña de PostgreSQL cuando se solicite
+  
+ Ingresar la contraseña de PostgreSQL cuando se solicite
 - `probando`
-## Verificar la estructura de la tabla
+  
+ Verificar la estructura de la tabla
 - `\d categorias`
-## Insertar datos en la tabla
+  
+ Insertar datos en la tabla
 - `INSERT INTO categorias VALUES ('Ejemplo Categoria');`
-## Consultar datos en la tabla
+  
+ Consultar datos en la tabla
 - `SELECT * FROM categorias;`
-## Salir de PostgreSQL
+  
+ Salir de PostgreSQL
 - `\q`
-## Salir de SSH
+  
+ Salir de SSH
 - `exit`
