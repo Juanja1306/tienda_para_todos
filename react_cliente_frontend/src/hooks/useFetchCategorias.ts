@@ -3,7 +3,7 @@ import { Categorias } from "../types"
 
 
 export const useFetchCategorias = () => {
-    const url_api = 'http://localhost:8000'
+    const url_api = 'http://localhost:8001'
 
     const categoriaInicial: Categorias[] = []
 

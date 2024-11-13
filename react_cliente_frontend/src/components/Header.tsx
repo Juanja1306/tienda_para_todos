@@ -1,6 +1,5 @@
-import { Link } from 'react-router-dom'
 import { CartItem, Clientes, Productos } from "../types"
-import { allRoutesComponents, dbClientes } from "../data/db"
+import { allRoutesComponents } from "../data/db"
 import { Dispatch } from 'react'
 
 
@@ -13,15 +12,18 @@ type HeaderProps = {
     decreaseProduct: (id: Productos["prod_id"]) => void
     removeCart: () => void
     cliente: Clientes
-    setCliente: Dispatch<React.SetStateAction<Clientes>>
-    postOrder: (cedula: string, cart: CartItem[]) => void
+    postOrder: (cedula: string, cart: CartItem[], removeCart: () => void) => void
+    setPage: Dispatch<React.SetStateAction<string>>
+    page: string
 }
 
-export default function Header({ cart, isEmpty, cartTotal, removeProductCart, increaseProduct, decreaseProduct, removeCart, cliente, setCliente, postOrder }: HeaderProps) {
+export default function Header({ cart, isEmpty, cartTotal, removeProductCart, increaseProduct, decreaseProduct, removeCart, cliente, postOrder, setPage, page }: HeaderProps) {
 
-    const prototipo = () => {
-        setCliente(dbClientes[0])
+    const toPage = (page: string) => (event: any) => {
+        event.preventDefault()
+        setPage(page)
     }
+
     return (
         <header className="header">
             <div className="cont--h">
@@ -31,8 +33,8 @@ export default function Header({ cart, isEmpty, cartTotal, removeProductCart, in
                             <h1>Tienda Para Todos</h1>
                         </a>
                     </div>
-                    <nav className={cliente.cli_cedula && "cont__nav__a"}>
-                        {cliente.cli_cedula ? (
+                    <nav className={(page === allRoutesComponents.storeProducts) ? "cont__nav__a" : ""}>
+                        {page === allRoutesComponents.storeProducts ? (
                             <div className="carrito">
                                 <img src="/img/carrito.png" alt="carrito" />
 
@@ -52,7 +54,7 @@ export default function Header({ cart, isEmpty, cartTotal, removeProductCart, in
                                                     {cart.map(product => (
                                                         <tr className="cart__row" key={product.prod_id}>
                                                             <td className="cart__image-cell">
-                                                                <img className="cart__image" src={`/img/${product.prod_imagen}.jpg`} alt="imagen_producto" />
+                                                                <img className="cart__image" src={product.imagen} alt="imagen_producto" />
                                                             </td>
                                                             <td className="cart__name">{product.prod_descripcion}</td>
                                                             <td className="cart__price">{product.prod_precio_unitario}</td>
@@ -84,7 +86,7 @@ export default function Header({ cart, isEmpty, cartTotal, removeProductCart, in
                                         {!isEmpty && (
                                             <>
                                                 <button className="cart__button__total" onClick={removeCart}>Vaciar Carrito</button>
-                                                <button className="cart__button__total bt__buy " onClick={() => postOrder(cliente.cli_cedula, cart)}>Comprar</button>
+                                                <button className="cart__button__total bt__buy " onClick={() => postOrder(cliente.cli_cedula, cart, removeCart)}>Comprar</button>
                                             </>
                                         )}
 
@@ -93,9 +95,11 @@ export default function Header({ cart, isEmpty, cartTotal, removeProductCart, in
                             </div>
                         ) : (
                             <>
-                                <Link className="nav__a" to={`/${allRoutesComponents.login}`}>Login</Link>
-                                <Link className="nav__a" to={`/${allRoutesComponents.signUp}`}>Registrarse</Link>
-                                <Link onClick={prototipo} className="nav__a" to={`/${allRoutesComponents.storeProducts}`}>Home</Link>
+                                <a className="nav__a" onClick={toPage(allRoutesComponents.login)}>Login User</a>
+                                <a className="nav__a" onClick={toPage(allRoutesComponents.signUp)} >SignUp User</a>
+                                <a className="nav__a" onClick={toPage(allRoutesComponents.prov_login)} >Login Provider</a>
+                                <a className="nav__a" onClick={toPage(allRoutesComponents.prov_signUp)} >SignUp Provider</a>
+
                             </>
                         )
                         }

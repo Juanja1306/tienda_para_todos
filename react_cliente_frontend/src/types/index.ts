@@ -14,6 +14,8 @@ export type Categorias = {
     cat_descripcion: string
 }
 
+
+
 export type Proveedores = {
     prov_id: number
     prov_nombre: string
@@ -29,7 +31,7 @@ export type Productos = {
     prod_precio_unitario: number
     prod_stock: number
     fk_cat_id: Categorias['cat_id']
-    prod_imagen: string
+    imagen: string
     fk_pro_provid: Proveedores['prov_id']
 }
 
@@ -49,8 +51,8 @@ export type Detalle_Ordenes_Cli = {
 }
 
 //* Modelos para la App
-export type CartItem = Pick<Productos, 'prod_id' | 'prod_descripcion' | 'prod_precio_unitario'| 'prod_imagen' | 'fk_cat_id'| 'fk_pro_provid'>  & {
-    cantidad : number
+export type CartItem = Pick<Productos, 'prod_id' | 'prod_descripcion' | 'prod_precio_unitario' | 'imagen' | 'fk_cat_id' | 'fk_pro_provid'> & {
+    cantidad: number
 }
 
 export type OrderProduct = {
@@ -63,4 +65,23 @@ export type OrderRequest = {
     productos: OrderProduct[];
 };
 
+export type ProductosVendidos = {
+    prod_id: number
+    prod_descripcion: string
+    prod_precio_unitario: string | number
+    detalle_cantidad: number
+}
+export type GetOrderRequest = {
+    prov_id: number
+    productos_vendidos: ProductosVendidos[]
+}
+
 export type Sign = Pick<Clientes, 'cli_correo' | 'cli_contrasenia'>
+
+export type SignProv = Pick<Proveedores, 'prov_correo' | 'prov_contrasenia'>
+
+export type CreateProduct = Pick<Productos, 'prod_id' | 'prod_descripcion' | 'prod_precio_unitario' | 'prod_stock'> & {
+    fk_categoria_id: number
+    prod_imagen: string
+    fk_prov_id: number
+}

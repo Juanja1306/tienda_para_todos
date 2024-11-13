@@ -1,9 +1,10 @@
 
+import { v4 as uuidv4 } from 'uuid'
 import ProductosComponent from "../components/ProductosComponent"
 import { Categorias, Productos } from "../types"
 
 
-export type StoreProductsProps = {
+type StoreProductsProps = {
   addToCart: (item: Productos) => void
   categorias: Categorias[]
   productos: Productos[]
@@ -27,18 +28,20 @@ export default function StoreProducts({ addToCart, categorias, productos = [], f
       <main className="main-container">
         <div>
           <h2 className="main-container__title">Nuestros Productos</h2>
-          <select name="" id="" onChange={handleSelectChange}>
-            <option value="0">Todos</option>
-            {categorias.map((categoria: Categorias) => (
-              <option key={categoria.cat_id} value={categoria.cat_id} >{categoria.cat_descripcion}</option>
-            ))
-            }
-          </select>
+          <div>
+            <select name="" id="" onChange={handleSelectChange}>
+              <option value="0">Todos</option>
+              {categorias.map((categoria: Categorias) => (
+                <option key={uuidv4()} value={categoria.cat_id} >{categoria.cat_descripcion}</option>
+              ))
+              }
+            </select>
+          </div>
         </div>
         <div className="main-container__grid">
           {productos.map((producto) => (
             <ProductosComponent
-              key={producto.prod_id}
+              key={uuidv4()}
               producto={producto}
               addToCart={addToCart}
             />

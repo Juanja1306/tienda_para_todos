@@ -274,6 +274,44 @@ nav {
   box-shadow: 0px 14px 21px 5px rgba(0, 0, 0, 0.39);
 }
 
+/* Detalle Orden Componente*/
+/** TABLE */
+.type__name{
+  color: var(--marine-blue);
+}
+
+.algorithm__table{    
+  border-collapse: collapse;
+  width: 100%;
+
+  border: .3rem solid var(--purplish-blue);
+
+  margin: auto;
+  text-align: center;
+}
+
+.algorithm__table th{
+  padding: .5rem;
+  color: var(--white);
+  background-color: var(--purplish-blue); 
+}
+
+.algorithm__table td{
+  /*border: .2rem solid var(--purplish-blue);*/
+  border-left: .2rem solid var(--purplish-blue);
+  border-right: .2rem solid var(--purplish-blue);
+  border-bottom: .1rem solid var(--cool-gray);
+}
+
+.page__founts{
+  color: var(--cool-gray);
+}
+
+.page__founts span{
+  color: var(--marine-blue);
+  font-weight: bold;
+}
+
 /* FORM Component */
 /** FORMULARY */
 fieldset {

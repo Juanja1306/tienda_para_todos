@@ -1,24 +1,22 @@
 import { ChangeEvent, FormEvent } from "react"
 import { Clientes } from "../types"
+import { allRoutesComponents } from "../data/db"
 
-
-
-
-export type LoginProps = {
+type LoginUsersProps = {
     cliente: Clientes
     handleChange: (e: ChangeEvent<HTMLInputElement>) => void
     handleSubmit: (e: FormEvent<HTMLFormElement>) => void
     isValidForm: () => boolean
+    page: string
 }
 
 
-export default function signUp({ cliente, handleChange, handleSubmit, isValidForm }: LoginProps) {
+export default function LoginUsers({ cliente, handleChange, handleSubmit, isValidForm, page }: LoginUsersProps) {
 
 
 
     return (
         <>
-
             <main className="main__background__form">
                 <div className="background__camp">
                     <form onSubmit={handleSubmit}>
@@ -43,7 +41,7 @@ export default function signUp({ cliente, handleChange, handleSubmit, isValidFor
                                 <div className="camp__inputs">
 
                                     <section className="camp__text">
-                                        <h3 className="camp__title">Registrese</h3>
+                                        <h3 className="camp__title">{page === allRoutesComponents.login ? 'Ingrese su usuario' : 'Registrarse'}</h3>
                                     </section>
                                     <div className="camp">
                                         <label htmlFor="cli_correo">Correo electrónico </label>
@@ -59,47 +57,49 @@ export default function signUp({ cliente, handleChange, handleSubmit, isValidFor
                                             value={cliente.cli_contrasenia}
                                             onChange={handleChange} />
                                     </div>
+                                    {page === allRoutesComponents.signUp && (
+                                        <>
+                                            <div className="camp">
+                                                <label htmlFor="cli_cedula">Cedula </label>
+                                                <input className="camp__txt" type="text" name="cli_cedula" id="cli_cedula" placeholder='Ej: 0125478963'
+                                                    value={cliente.cli_cedula}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                            <div className="camp">
+                                                <label htmlFor="cli_nombre">Nombre </label>
+                                                <input className="camp__txt" type="text" name="cli_nombre" id="cli_nombre" placeholder='Ej: Felipe'
+                                                    value={cliente.cli_nombre}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
 
+                                            <div className="camp">
+                                                <label htmlFor="cli_apellido">Apellido </label>
+                                                <input className="camp__txt" type="text" name="cli_apellido" id="cli_apellido" placeholder='Ej: Sanchez'
+                                                    value={cliente.cli_apellido}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                            <div className="camp">
+                                                <label htmlFor="cli_direccion">Dirección </label>
+                                                <input className="camp__txt" type="text" name="cli_direccion" id="cli_direccion" placeholder='Ej: Av. Americas'
+                                                    value={cliente.cli_direccion}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                            <div className="camp">
+                                                <label htmlFor="cli_celular">Celular </label>
+                                                <input className="camp__txt" type="text" name="cli_celular" id="cli_celular" placeholder='Ej: 0985236147'
+                                                    value={cliente.cli_celular}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>                                           
+                                        </>
+                                    )}
 
-
-                                    <div className="camp">
-                                        <label htmlFor="cli_cedula">Cedula </label>
-                                        <input className="camp__txt" type="text" name="cli_cedula" id="cli_cedula" placeholder='Ej: 0125478963'
-                                            value={cliente.cli_cedula}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="camp">
-                                        <label htmlFor="cli_nombre">Nombre </label>
-                                        <input className="camp__txt" type="text" name="cli_nombre" id="cli_nombre" placeholder='Ej: Felipe'
-                                            value={cliente.cli_nombre}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-
-                                    <div className="camp">
-                                        <label htmlFor="cli_apellido">Apellido </label>
-                                        <input className="camp__txt" type="text" name="cli_apellido" id="cli_apellido" placeholder='Ej: Felipe'
-                                            value={cliente.cli_apellido}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="camp">
-                                        <label htmlFor="cli_direccion">Dirección </label>
-                                        <input className="camp__txt" type="text" name="cli_direccion" id="cli_direccion" placeholder='Ej: Felipe'
-                                            value={cliente.cli_direccion}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="camp">
-                                        <label htmlFor="cli_celular">Celular </label>
-                                        <input className="camp__txt" type="text" name="cli_celular" id="cli_celular" placeholder='Ej: Felipe'
-                                            value={cliente.cli_celular}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
                                     <div className="camp camp__button">
-                                        <button className="button" type="submit" disabled={!isValidForm()}>Ingresar</button>
+                                        <button className="button" type="submit" disabled={!isValidForm()}>{page === allRoutesComponents.login ? 'Ingresar' : 'Registrarse'}</button>
                                     </div>
 
                                 </div>

@@ -1,17 +1,17 @@
-import { ChangeEvent, FormEvent, useState } from "react"
+import { ChangeEvent, Dispatch, FormEvent, useState } from "react"
 import { Clientes, Sign } from "../types"
+import { allRoutesComponents } from "../data/db"
 //import { useNavigate } from 'react-router-dom';
 
 const initialUser: Clientes = { cli_cedula: '', cli_nombre: '', cli_apellido: '', cli_correo: '', cli_celular: '', cli_direccion: '', cli_contrasenia: '' }
 
 
-export const useClient = () => {
+export const useClient = (setPage:Dispatch<React.SetStateAction<string>>) => {
 
-    // const navigate = useNavigate();
-
-    const url_api = 'http://localhost:8000'
+    const url_api = 'http://localhost:8001'
 
     const [cliente, setCliente] = useState(initialUser)
+    
 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -19,6 +19,8 @@ export const useClient = () => {
             ...cliente,
             [e.target.id]: e.target.value
         })
+
+        
 
     }
 
@@ -47,6 +49,9 @@ export const useClient = () => {
             if (!response.ok) throw new Error(`Error: ${response.statusText}`);
 
             const data = await response.json();
+            
+            if(data.status === 'error') throw new Error(data.message)
+            
             const logCliente: Clientes = {
                 cli_cedula: data.cli_cedula,
                 cli_nombre: data.cli_nombre,
@@ -59,6 +64,7 @@ export const useClient = () => {
 
             setCliente(logCliente);
             alert('Logeado correctamente')
+            setPage(allRoutesComponents.storeProducts)
         } catch (error) {
             console.log(error)
         }
@@ -77,6 +83,7 @@ export const useClient = () => {
 
             if (!response.ok) throw new Error(`Error: ${response.statusText}`);
             alert('Se ha registrado correctamente')
+            setPage(allRoutesComponents.storeProducts)
         } catch (error) {
             console.log(error)
         }
@@ -88,8 +95,5 @@ export const useClient = () => {
         handleSubmit,
         isValidForm,
         createClient,
-
-        setCliente //!Borrar esto
-
     }
 }

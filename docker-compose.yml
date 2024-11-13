@@ -31,7 +31,7 @@ services:
   web:
     build:
       context: .
-      dockerfile: ./backend_django/Dockerfile
+      dockerfile: backend_django/Dockerfile
     container_name: django_backend
     ports:
       - "8001:8000"
@@ -51,9 +51,22 @@ services:
     networks:
       - datalogger_net
     command: >
+
       sh -c "python manage.py migrate &&
       python manage.py shell < create_superuser.py &&
       python manage.py runserver 0.0.0.0:8000"
+
+  frontend:
+    build:
+      context: ./react_cliente_frontend
+      dockerfile: Dockerfile
+    container_name: react_frontend
+    ports:
+      - "5173:5173"
+    networks:
+      - datalogger_net
+  
+ 
 
   portainer:
     image: portainer/portainer-ce
@@ -100,6 +113,7 @@ services:
     networks:
       - datalogger_net
     restart: unless-stopped
+
 
 
 volumes:
