@@ -92,11 +92,8 @@ Para acceder al panel de administración de Django, utiliza las siguientes crede
 ### Ingresar la contraseña de PostgreSQL cuando se solicite
 - `probando`
   
-### Verificar la estructura de la tabla
-- `\d categorias`
-  
 ### Insertar datos en la tabla
-- `INSERT INTO categorias VALUES ('Ejemplo Categoria');`
+- `INSERT INTO categorias (cat_descripcion) VALUES ('Ejemplo Categoria');`
   
 ### Consultar datos en la tabla
 - `SELECT * FROM categorias;`
