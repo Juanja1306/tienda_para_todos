@@ -68,7 +68,7 @@ Para acceder al panel de administración de Django, utiliza las siguientes crede
 
 - **Pagina:** http://localhost:3000/
 - **Usuario:** `admin`
-- **Contraseña:** `TLpRjw7pt5s9BeK`
+- **Contraseña:** `admin`
 
 ## Entrar a Netdata
 
