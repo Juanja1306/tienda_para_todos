@@ -50,7 +50,10 @@ export const useClient = (setPage:Dispatch<React.SetStateAction<string>>) => {
 
             const data = await response.json();
             
-            if(data.status === 'error') throw new Error(data.message)
+            if(data.status === 'error') {
+                alert('Usurio o Contraseña invalidos')
+                throw new Error(data.message)
+            }
             
             const logCliente: Clientes = {
                 cli_cedula: data.cli_cedula,

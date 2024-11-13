@@ -2,6 +2,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import ProductosComponent from "../components/ProductosComponent"
 import { Categorias, Productos } from "../types"
+import { useEffect } from 'react'
+import { useFetchCategorias } from '../hooks/useFetchCategorias'
 
 
 type StoreProductsProps = {
@@ -14,14 +16,16 @@ type StoreProductsProps = {
 
 export default function StoreProducts({ addToCart, categorias, productos = [], fetchAllProductos, fetchProductosByCategoria }: StoreProductsProps) {
 
-  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedCategoryId = event.target.value;
-    if (selectedCategoryId === "0") {
-      fetchAllProductos(); // Si selecciona "Todos", trae todos los productos
-    } else {
-      fetchProductosByCategoria(Number(selectedCategoryId)); // Si selecciona una categoría, trae los productos de esa categoría
-    }
-  };
+  const { filterCat, handleSelectChangeCategory } = useFetchCategorias()
+  /*
+    useEffect(() => {
+      filterCat === 0 ? 
+        fetchAllProductos() : fetchProductosByCategoria(filterCat)
+    }, [filterCat,,fetchAllProductos, fetchProductosByCategoria])
+  */
+
+  useEffect(() => {filterCat === 0 ? fetchAllProductos() : fetchProductosByCategoria(filterCat)}, [filterCat]);
+
 
   return (
     <>
@@ -29,10 +33,19 @@ export default function StoreProducts({ addToCart, categorias, productos = [], f
         <div>
           <h2 className="main-container__title">Nuestros Productos</h2>
           <div>
-            <select name="" id="" onChange={handleSelectChange}>
-              <option value="0">Todos</option>
+            <select
+              id="cat_id"
+              onChange={handleSelectChangeCategory}
+              value={filterCat}
+            >
+              <option value={0}>Todos</option>
               {categorias.map((categoria: Categorias) => (
-                <option key={uuidv4()} value={categoria.cat_id} >{categoria.cat_descripcion}</option>
+                <option
+                  key={uuidv4()}
+                  value={categoria.cat_id}
+                >
+                  {categoria.cat_descripcion}
+                </option>
               ))
               }
             </select>

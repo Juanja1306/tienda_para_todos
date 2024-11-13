@@ -44,7 +44,10 @@ export const useFetchProveedor = (setPage: Dispatch<React.SetStateAction<string>
 
             const data = await res.json()
             
-            if(data.status === 'error') throw new Error(data.message)
+            if(data.status === 'error') {
+                alert('Correo o contraseña invalidos')
+                throw new Error(data.message)
+            }
 
             
             const logProv: Proveedores = {

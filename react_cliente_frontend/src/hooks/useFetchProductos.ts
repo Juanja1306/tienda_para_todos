@@ -4,7 +4,6 @@ import { Categorias, CreateProduct, Productos, Proveedores } from "../types"
 
 export const useFetchProductos = () => {
 
-    //TODO: cambiar el puerto al momento de Dockerizar
     const url_api = 'http://localhost:8001'
 
     const imageNotSelected = '/img/selectImage.jpg'
@@ -15,7 +14,7 @@ export const useFetchProductos = () => {
     const [imgSrc, setImgSrc] = useState<string>(imageNotSelected);
     const [newProduct, setNewProduct] = useState(initialProduct)
 
-    
+
     const fetchAllProductos = async () => {
 
         try {
@@ -29,18 +28,20 @@ export const useFetchProductos = () => {
     }
 
     const fetchProductosByProvider = async (proveedor_id: Proveedores['prov_id']) => {
-
-        try {
-            const response = await fetch(`${url_api}/list_productos_by_proveedor/${proveedor_id}`)
-            if (!response.ok) throw new Error('Error al obtener todos los productos')
-            const products: Productos[] = await response.json()
-            setProducto(products)
-        } catch (error) {
-            console.log(error)
+        if (proveedor_id === 0) {
+            try {
+                const response = await fetch(`${url_api}/list_productos_by_proveedor/${proveedor_id}`)
+                if (!response.ok) throw new Error('Error al obtener todos los productos')
+                const products: Productos[] = await response.json()
+                setProducto(products)
+            } catch (error) {
+                console.log(error)
+            }
         }
     }
 
     useEffect(() => { fetchAllProductos() }, [])
+    useEffect(() => { fetchProductosByProvider }, [productos])
 
     const fetchProductosByCategoria = async (categoriaId: Categorias['cat_id']) => {
 
@@ -86,7 +87,7 @@ export const useFetchProductos = () => {
         setNewProduct({ ...newProduct, ['fk_pro_provid']: fk_pro_provid })
         //setNewProduct({ ...newProduct, ['fk_cat_id']: 1 })
 
-        console.log
+
         const createProduct: CreateProduct = {
             prod_id: 0,
             prod_descripcion: newProduct.prod_descripcion,
@@ -98,13 +99,12 @@ export const useFetchProductos = () => {
         }
 
         try {
-            console.log(createProduct)
-            
+
             const response = await fetch(`${url_api}/create_producto/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                },                
+                },
                 body: JSON.stringify(createProduct)
             })
 
@@ -115,6 +115,7 @@ export const useFetchProductos = () => {
         }
 
         setNewProduct(initialProduct)
+        setImgSrc(imageNotSelected)
     }
 
     const selectImg = (e: ChangeEvent<HTMLInputElement>) => {
