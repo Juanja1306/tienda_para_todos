@@ -77,28 +77,23 @@ Entrar a Netdata
 
 
 # Conectarse al contenedor SSH
-- `ssh usuario@localhost -p 2222`
+- `ssh root@localhost -p 2222`
 # Ingresar la contraseña de SSH cuando se solicite
-- `contra0000`
+- `root`
 # Instalar las dependencias necesarias (solo si es la primera vez)
 - `apt update`
 - `apt install -y postgresql-client`
-
 # Conectarse a PostgreSQL
 - `psql -h postgres_db_new -U postgres -d probando`
 # Ingresar la contraseña de PostgreSQL cuando se solicite
 - `probando`
 # Verificar la estructura de la tabla
 - `\d categorias`
-
 # Insertar datos en la tabla
 - `INSERT INTO categorias VALUES ('Ejemplo Categoria');`
-
 # Consultar datos en la tabla
 - `SELECT * FROM categorias;`
-
 # Salir de PostgreSQL
 - `\q`
-
 # Salir de SSH
 - `exit`
