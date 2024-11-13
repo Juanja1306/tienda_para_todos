@@ -76,24 +76,24 @@ Entrar a Netdata
 - **Entrar en:** Skip and use the dashboard anonymously.
 
 
-# Conectarse al contenedor SSH
+## Conectarse al contenedor SSH
 - `ssh root@localhost -p 2222`
-# Ingresar la contraseña de SSH cuando se solicite
+## Ingresar la contraseña de SSH cuando se solicite
 - `root`
-# Instalar las dependencias necesarias (solo si es la primera vez)
+## Instalar las dependencias necesarias (solo si es la primera vez)
 - `apt update`
 - `apt install -y postgresql-client`
-# Conectarse a PostgreSQL
+## Conectarse a PostgreSQL
 - `psql -h postgres_db_new -U postgres -d probando`
-# Ingresar la contraseña de PostgreSQL cuando se solicite
+## Ingresar la contraseña de PostgreSQL cuando se solicite
 - `probando`
-# Verificar la estructura de la tabla
+## Verificar la estructura de la tabla
 - `\d categorias`
-# Insertar datos en la tabla
+## Insertar datos en la tabla
 - `INSERT INTO categorias VALUES ('Ejemplo Categoria');`
-# Consultar datos en la tabla
+## Consultar datos en la tabla
 - `SELECT * FROM categorias;`
-# Salir de PostgreSQL
+## Salir de PostgreSQL
 - `\q`
-# Salir de SSH
+## Salir de SSH
 - `exit`
