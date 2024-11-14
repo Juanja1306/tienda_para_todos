@@ -54,7 +54,7 @@ export default function Header({ cart, isEmpty, cartTotal, removeProductCart, in
                                                     {cart.map(product => (
                                                         <tr className="cart__row" key={product.prod_id}>
                                                             <td className="cart__image-cell">
-                                                                <img className="cart__image" src={product.imagen} alt="imagen_producto" />
+                                                                <img className="cart__image" src={product.prod_imagen} alt="imagen_producto" />
                                                             </td>
                                                             <td className="cart__name">{product.prod_descripcion}</td>
                                                             <td className="cart__price">{product.prod_precio_unitario}</td>
