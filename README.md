@@ -18,7 +18,7 @@ volumes:
 Reemplaza `device: C:/Users/juanj/Desktop/datapg` por una ruta en tu sistema donde se almacenarán los datos de PostgreSQL.
 
 
-## Iniciar el Servidor de Desarrollo
+## Iniciar el Servidor
 
 Ejecuta el siguiente comando para iniciar el servidor de Django:
 ```bash
