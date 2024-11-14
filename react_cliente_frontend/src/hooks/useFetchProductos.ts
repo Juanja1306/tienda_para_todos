@@ -10,7 +10,7 @@ export const useFetchProductos = () => {
 
     const imageNotSelected = '/img/selectImage.jpg'
     const productosIniciales: Productos[] = []
-    const initialProduct: Productos = { prod_id: 0, prod_descripcion: '', prod_precio_unitario: 0, prod_stock: 0, fk_cat_id: 0, imagen: '', prod_imagen: '', fk_pro_provid: 0 }
+    const initialProduct: Productos = { prod_id: 0, prod_descripcion: '', prod_precio_unitario: 0, prod_stock: 0, fk_cat_id: 0, prod_imagen: '', fk_pro_provid: 0 }
 
     const [productos, setProducto] = useState(productosIniciales)
     const [imgSrc, setImgSrc] = useState<string>(imageNotSelected);
@@ -71,14 +71,14 @@ export const useFetchProductos = () => {
         });
     };
     const isValidProduct = () => {
-        const { prod_descripcion, prod_precio_unitario, prod_stock, imagen } = newProduct
+        const { prod_descripcion, prod_precio_unitario, prod_stock, prod_imagen } = newProduct
 
         return (
             prod_descripcion.trim() !== '' &&
             prod_precio_unitario > 0 &&
             prod_stock > 0 &&
-            imagen.trim() !== '' &&
-            imagen.trim() !== imageNotSelected
+            prod_imagen.trim() !== '' &&
+            prod_imagen.trim() !== imageNotSelected
         )
     }
 
@@ -91,7 +91,7 @@ export const useFetchProductos = () => {
             prod_precio_unitario: newProduct.prod_precio_unitario,
             prod_stock: newProduct.prod_precio_unitario,
             fk_categoria_id: newProduct.fk_cat_id,
-            prod_imagen: newProduct.imagen,
+            prod_imagen: newProduct.prod_imagen,
             fk_prov_id: fk_pro_provid
         }
 
@@ -125,7 +125,7 @@ export const useFetchProductos = () => {
             reader.readAsDataURL(input.files[0]);
             reader.onload = () => {
                 setImgSrc(reader.result as string);
-                setNewProduct({ ...newProduct, ['imagen']: reader.result as string })
+                setNewProduct({ ...newProduct, ['prod_imagen']: reader.result as string })
             }
 
         } else {

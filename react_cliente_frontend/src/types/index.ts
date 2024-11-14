@@ -30,8 +30,7 @@ export type Productos = {
     prod_descripcion: string
     prod_precio_unitario: number
     prod_stock: number
-    fk_cat_id: Categorias['cat_id']
-    imagen: string
+    fk_cat_id: Categorias['cat_id']    
     prod_imagen:string
     fk_pro_provid: Proveedores['prov_id']
 }
@@ -52,7 +51,7 @@ export type Detalle_Ordenes_Cli = {
 }
 
 //* Modelos para la App
-export type CartItem = Pick<Productos, 'prod_id' | 'prod_descripcion' | 'prod_precio_unitario' | 'imagen' | 'fk_cat_id' | 'fk_pro_provid'> & {
+export type CartItem = Pick<Productos, 'prod_id' | 'prod_descripcion' | 'prod_precio_unitario' | 'prod_imagen' | 'fk_cat_id' | 'fk_pro_provid'> & {
     cantidad: number
 }
 

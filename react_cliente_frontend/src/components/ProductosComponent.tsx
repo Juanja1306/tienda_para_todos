@@ -14,7 +14,7 @@ export default function ProductosComponent({ producto, addToCart }: ProductosPro
         <>
             <div className="productos-card">
                 <div className="productos-card__image-container">
-                    <img className="productos-card__image" src={producto.imagen ? producto.imagen: producto.prod_imagen} alt="imagen producto" />
+                    <img className="productos-card__image" src={producto.prod_imagen} alt="imagen producto" />
                 </div>
                 <div className="productos-card__details">
                     <h3 className="productos-card__title">{producto.prod_descripcion}</h3>
