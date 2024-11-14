@@ -53,10 +53,9 @@ Para acceder al panel de administración de Django, utiliza las siguientes crede
 - **Usuario:** `admin`
 - **Contraseña:** `admin123`
 
-## Notas Importantes
+## Entrar al frontend React:
 
-- **Errores iniciales:** Es posible que aparezcan errores al inicio. Puedes ignorarlos y esperar de 3 a 5 minutos hasta que todos los contenedores se inicialicen correctamente.
-
+- **Pagina:** http://localhost:5173/
 
 ## Entrar a portainer:
 
@@ -75,9 +74,7 @@ Para acceder al panel de administración de Django, utiliza las siguientes crede
 - **Pagina:** http://localhost:19999/
 - **Entrar en:** Skip and use the dashboard anonymously.
 
-
 ## Conectarse al contenedor SSH
-
 
 - **Usuario:** `ssh root@localhost -p 2222`
 - **Contraseña:** `root`
@@ -105,7 +102,6 @@ Para acceder al panel de administración de Django, utiliza las siguientes crede
 - `exit`
 
 ## Notas Importantes
-
 
 ### Ingreso de Categoría
 El ingreso de nuevas categorías está restringido exclusivamente al administrador. Esta medida asegura el control total sobre la estructura de datos y evita inconsistencias que podrían afectar la integridad del sistema.
