@@ -208,19 +208,21 @@ nav {
   color: #ffff;
   font-family: var(--embed_code);
   padding: 1rem;
-  border-radius: 0.5rem;
+  border-radius: 0.5rem;  
   transition: background-color .3s ease;
   padding: 1rem;
+  text-align: center;
 }
 
 .nav__a:hover {
   background-color: var(--pastel-blue);
   color: var(--marine-blue);
+  cursor: pointer;
 }
 
 @media (min-width: 768px) {
   .cont__nav__a {
-    width: 40%;
+    width: 80%;
     margin-left: auto;
     flex-direction: row;
     justify-content: space-between;
@@ -230,7 +232,7 @@ nav {
 
 @media (min-width: 920px) {
   .cont__nav__a {
-    width: 30%;
+    width: 50%;
   }
 
 }

@@ -8,7 +8,7 @@ type DetalleOrdenProps = {
 }
 
 export default function DetalleOrden({ proveedor_id }: DetalleOrdenProps) {
-    const { detalleOrden, getDetallaOrdenPorProveedor } = useFetchOrdenes()
+    const { detalleOrdenInicial, detalleOrden = detalleOrdenInicial, getDetallaOrdenPorProveedor } = useFetchOrdenes()
     useEffect(() => { getDetallaOrdenPorProveedor(proveedor_id) }, [])
     useEffect(() => { getDetallaOrdenPorProveedor(proveedor_id) }, [detalleOrden])
 
@@ -24,14 +24,20 @@ export default function DetalleOrden({ proveedor_id }: DetalleOrdenProps) {
                     </tr>
                 </thead>
                 <tbody className="table__body">
-                    {detalleOrden?.productos_vendidos.length > 0 &&
+                    {(detalleOrden?.productos_vendidos?.length > 0) ?
                         detalleOrden?.productos_vendidos?.map(producto => (
                             <tr key={producto.prod_id}>
                                 <td>{producto.prod_descripcion}</td>
                                 <td>{producto.prod_precio_unitario}</td>
                                 <td>{producto.detalle_cantidad}</td>
                             </tr>
-                        ))}
+                        )
+                        ) : (
+                            <tr>
+                                <td>Sin ordenes</td>
+                            </tr>
+                        )
+                    }
                 </tbody>
             </table>
         </>

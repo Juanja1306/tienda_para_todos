@@ -33,7 +33,7 @@ export default function Header({ cart, isEmpty, cartTotal, removeProductCart, in
                             <h1>Tienda Para Todos</h1>
                         </a>
                     </div>
-                    <nav className={(page === allRoutesComponents.storeProducts) ? "cont__nav__a" : ""}>
+                    <nav className={(page !== allRoutesComponents.storeProducts) ? "cont__nav__a" : ""}>
                         {page === allRoutesComponents.storeProducts ? (
                             <div className="carrito">
                                 <img src="/img/carrito.png" alt="carrito" />

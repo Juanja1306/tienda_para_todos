@@ -53,7 +53,8 @@ export const useFetchOrdenes = () => {
     return {
         postOrder,
         getDetallaOrdenPorProveedor,
-        detalleOrden
+        detalleOrden,
+        detalleOrdenInicial
     };
 
 
