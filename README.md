@@ -103,3 +103,18 @@ Para acceder al panel de administración de Django, utiliza las siguientes crede
   
 ### Salir de SSH
 - `exit`
+
+## Notas Importantes
+
+
+### Ingreso de Categoría
+El ingreso de nuevas categorías está restringido exclusivamente al administrador. Esta medida asegura el control total sobre la estructura de datos y evita inconsistencias que podrían afectar la integridad del sistema.
+
+### Errores Iniciales
+Durante el arranque del proyecto, es posible que aparezcan errores o mensajes de advertencia en la consola. Estos suelen estar relacionados con la inicialización de servicios y pueden ignorarse. Se recomienda esperar de 3 a 5 minutos para que todos los contenedores se inicialicen completamente.
+
+### Ajuste de Rutas de Volúmenes
+Es crucial verificar que las rutas de los volúmenes definidas en el archivo `docker-compose.yml` estén correctamente configuradas según la estructura de tu sistema local. Esto es especialmente importante para servicios que utilizan volúmenes persistentes, como `postgres_data`, `portainer_data` y `grafana_data`. Asegúrate de que las rutas absolutas en el archivo apunten a directorios existentes en tu máquina.
+
+### Consistencia del Entorno
+Antes de iniciar el proyecto, verifica que no haya servicios en tu máquina ocupando los puertos definidos (5050, 8001, 9000, 3000, 19999, y 2222). Esto evitará conflictos y garantizará un despliegue sin interrupciones.
