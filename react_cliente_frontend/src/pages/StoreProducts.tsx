@@ -17,13 +17,7 @@ type StoreProductsProps = {
 export default function StoreProducts({ addToCart, categorias, productos = [], fetchAllProductos, fetchProductosByCategoria }: StoreProductsProps) {
 
   const { filterCat, handleSelectChangeCategory } = useFetchCategorias()
-  /*
-    useEffect(() => {
-      filterCat === 0 ? 
-        fetchAllProductos() : fetchProductosByCategoria(filterCat)
-    }, [filterCat,,fetchAllProductos, fetchProductosByCategoria])
-  */
-
+ 
   useEffect(() => {filterCat === 0 ? fetchAllProductos() : fetchProductosByCategoria(filterCat)}, [filterCat]);
 
 

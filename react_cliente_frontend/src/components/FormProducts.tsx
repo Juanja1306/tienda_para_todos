@@ -10,6 +10,7 @@ type FormProductsProps = {
 export default function FormProducts({ categorias, proveedor_id }: FormProductsProps) {
 
     const { newProduct, selectImg, handleChangeProduct, handleSubmitProduct, isValidProduct, imgSrc } = useFetchProductos()
+
     return (
         <>
             <form onSubmit={(e) => handleSubmitProduct(e, proveedor_id)}>
@@ -66,11 +67,12 @@ export default function FormProducts({ categorias, proveedor_id }: FormProductsP
                                     onChange={handleChangeProduct}
                                     value={newProduct.fk_cat_id}
                                 >
-                                    {categorias.map((categoria) => (
-                                        <option key={uuidv4()} value={categoria.cat_id}>
-                                            {categoria.cat_descripcion}
-                                        </option>
-                                    ))}
+                                    {categorias.length > 0 &&
+                                        categorias.map((categoria) => (
+                                            <option key={uuidv4()} value={categoria.cat_id}>
+                                                {categoria.cat_descripcion}
+                                            </option>
+                                        ))}
                                 </select>
                             </div>
 

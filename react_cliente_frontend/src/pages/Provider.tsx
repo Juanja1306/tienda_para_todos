@@ -1,47 +1,36 @@
 import { v4 as uuidv4 } from 'uuid'
-import FormProducts from "../components/FormProducts"
 import ProductosComponent from "../components/ProductosComponent"
-import { Categorias, Proveedores } from "../types"
+import { Categorias, Productos, Proveedores } from "../types"
 import DetalleOrden from '../components/DetalleOrden'
-import { useFetchProductos } from '../hooks/useFetchProductos'
 import { useEffect } from 'react'
+import FormProducts from '../components/FormProducts'
+//import { useFetchCategorias } from '../hooks/useFetchCategorias'
 type ProviderProps = {
     categorias: Categorias[]
-    fetchAllProductos: () => Promise<void>
+    fetchProductosByProvider: (proveedor_id: Proveedores["prov_id"]) => Promise<void>
     fetchProductosByCategoria: (categoriaId: Categorias["cat_id"]) => Promise<void>
     proveedor_id: Proveedores['prov_id']
+    productosProv: Productos[]
+    handleSubmitProduct: (e: React.FormEvent<HTMLFormElement>, fk_pro_provid: number) => Promise<void>
 }
 
-export default function Provider({ categorias, fetchAllProductos, fetchProductosByCategoria, proveedor_id }: ProviderProps) {
+export default function Provider({ categorias, fetchProductosByProvider, proveedor_id, productosProv = [] }: ProviderProps) {
 
 
-    const { productos, fetchProductosByProvider } = useFetchProductos()
 
-    useEffect(() => { fetchProductosByProvider(proveedor_id) }, [productos])
+    useEffect(() => { fetchProductosByProvider(proveedor_id) }, []);
+    useEffect(() => { fetchProductosByProvider(proveedor_id) }, [productosProv]);
 
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedCategoryId = event.target.value;
-        if (selectedCategoryId === "0") {
-            fetchAllProductos();
-        } else {
-            fetchProductosByCategoria(+selectedCategoryId);
-        }
-    };
+
     return (
         <>
             <main className="main-container">
                 <div>
                     <h2 className="main-container__title">Tus Productos</h2>
-                    <select name="" onChange={handleSelectChange}>
-                        <option key={uuidv4()} value="0">Todos</option>
-                        {categorias.map((categoria: Categorias) => (
-                            <option key={uuidv4()} value={categoria.cat_id}>{categoria.cat_descripcion}</option>
-                        ))
-                        }
-                    </select>
+
                 </div>
                 <div className="main-container__grid">
-                    {productos.map((producto) => (
+                    {productosProv.length > 0 && productosProv.map((producto) => (
                         <ProductosComponent
                             key={uuidv4()}
                             producto={producto}
@@ -51,10 +40,14 @@ export default function Provider({ categorias, fetchAllProductos, fetchProductos
                     ))
                     }
                 </div>
+
                 <FormProducts
                     categorias={categorias}
                     proveedor_id={proveedor_id}
                 />
+
+
+
 
                 <DetalleOrden
                     proveedor_id={proveedor_id}

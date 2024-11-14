@@ -46,6 +46,7 @@ export const useFetchOrdenes = () => {
             setDetalleOrden(response)
         } catch (error) {
             console.log(error)
+            setDetalleOrden(detalleOrdenInicial)
         }
     }
 

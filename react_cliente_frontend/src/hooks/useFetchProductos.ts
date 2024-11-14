@@ -8,7 +8,7 @@ export const useFetchProductos = () => {
 
     const imageNotSelected = '/img/selectImage.jpg'
     const productosIniciales: Productos[] = []
-    const initialProduct: Productos = { prod_id: 0, prod_descripcion: '', prod_precio_unitario: 0, prod_stock: 0, fk_cat_id: 0, imagen: '', fk_pro_provid: 0 }
+    const initialProduct: Productos = { prod_id: 0, prod_descripcion: '', prod_precio_unitario: 0, prod_stock: 0, fk_cat_id: 0, imagen: '', prod_imagen: '', fk_pro_provid: 0 }
 
     const [productos, setProducto] = useState(productosIniciales)
     const [imgSrc, setImgSrc] = useState<string>(imageNotSelected);
@@ -24,11 +24,12 @@ export const useFetchProductos = () => {
             setProducto(products)
         } catch (error) {
             console.log(error)
+            setProducto([])
         }
     }
 
     const fetchProductosByProvider = async (proveedor_id: Proveedores['prov_id']) => {
-        if (proveedor_id === 0) {
+        if (proveedor_id !== 0) {
             try {
                 const response = await fetch(`${url_api}/list_productos_by_proveedor/${proveedor_id}`)
                 if (!response.ok) throw new Error('Error al obtener todos los productos')
@@ -36,12 +37,13 @@ export const useFetchProductos = () => {
                 setProducto(products)
             } catch (error) {
                 console.log(error)
+                setProducto([])
             }
         }
     }
 
     useEffect(() => { fetchAllProductos() }, [])
-    useEffect(() => { fetchProductosByProvider }, [productos])
+
 
     const fetchProductosByCategoria = async (categoriaId: Categorias['cat_id']) => {
 
@@ -51,7 +53,7 @@ export const useFetchProductos = () => {
             const products: Productos[] = await response.json()
             setProducto(products)
         } catch (error) {
-
+            setProducto([])
         }
     }
 

@@ -21,7 +21,7 @@ function App() {
   const { cart, addToCart, removeProductCart, increaseProduct, decreaseProduct, removeCart, isEmpty, cartTotal } = useCart()
   const { cliente, handleChange, handleSubmit, isValidForm } = useClient(setPage)
   const { categorias } = useFetchCategorias()
-  const { productos, fetchAllProductos, fetchProductosByCategoria } = useFetchProductos()
+  const { productos, fetchAllProductos, fetchProductosByCategoria, fetchProductosByProvider, handleSubmitProduct } = useFetchProductos()
   const { postOrder } = useFetchOrdenes();
   const { proveedor, handleChangeProv, handleSubmitProv, isValidFormProv } = useFetchProveedor(setPage)
 
@@ -61,9 +61,11 @@ function App() {
 
     else if (page === allRoutesComponents.providerProducts) {
       return <Provider
+      productosProv={productos}
         proveedor_id={proveedor.prov_id}
         categorias={categorias}
-        fetchAllProductos={fetchAllProductos}
+        handleSubmitProduct={handleSubmitProduct}
+        fetchProductosByProvider={fetchProductosByProvider}
         fetchProductosByCategoria={fetchProductosByCategoria}
       />
     }

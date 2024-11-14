@@ -32,6 +32,7 @@ export type Productos = {
     prod_stock: number
     fk_cat_id: Categorias['cat_id']
     imagen: string
+    prod_imagen:string
     fk_pro_provid: Proveedores['prov_id']
 }
 
