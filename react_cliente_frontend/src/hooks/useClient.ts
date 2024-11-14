@@ -1,6 +1,8 @@
 import { ChangeEvent, Dispatch, FormEvent, useState } from "react"
 import { Clientes, Sign } from "../types"
 import { allRoutesComponents } from "../data/db"
+import { succesfullAlert } from "../alerts/alerts"
+import { DefaultError, UserInvalid } from "../errors/errors"
 //import { useNavigate } from 'react-router-dom';
 
 const initialUser: Clientes = { cli_cedula: '', cli_nombre: '', cli_apellido: '', cli_correo: '', cli_celular: '', cli_direccion: '', cli_contrasenia: '' }
@@ -14,15 +16,7 @@ export const useClient = (setPage:Dispatch<React.SetStateAction<string>>) => {
     
 
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setCliente({
-            ...cliente,
-            [e.target.id]: e.target.value
-        })
-
-        
-
-    }
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {setCliente({...cliente, [e.target.id]: e.target.value})}
 
     const isValidForm = () => {
         const { cli_correo, cli_contrasenia } = cliente;
@@ -50,10 +44,8 @@ export const useClient = (setPage:Dispatch<React.SetStateAction<string>>) => {
 
             const data = await response.json();
             
-            if(data.status === 'error') {
-                alert('Usurio o Contraseña invalidos')
-                throw new Error(data.message)
-            }
+            if(data.status === 'error') throw new UserInvalid(data.message)
+            
             
             const logCliente: Clientes = {
                 cli_cedula: data.cli_cedula,
@@ -66,10 +58,10 @@ export const useClient = (setPage:Dispatch<React.SetStateAction<string>>) => {
             }
 
             setCliente(logCliente);
-            alert('Logeado correctamente')
+            succesfullAlert('Logeado correctamente')
             setPage(allRoutesComponents.storeProducts)
         } catch (error) {
-            console.log(error)
+            error instanceof UserInvalid ? error.alert(): DefaultError.alert()
         }
     }
 
@@ -85,10 +77,10 @@ export const useClient = (setPage:Dispatch<React.SetStateAction<string>>) => {
             })
 
             if (!response.ok) throw new Error(`Error: ${response.statusText}`);
-            alert('Se ha registrado correctamente')
+            succesfullAlert('Se ha registrado correctamente')
             setPage(allRoutesComponents.storeProducts)
         } catch (error) {
-            console.log(error)
+            DefaultError.alert()
         }
     }
 

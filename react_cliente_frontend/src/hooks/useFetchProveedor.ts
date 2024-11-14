@@ -1,6 +1,7 @@
 import { ChangeEvent, useState, FormEvent, Dispatch } from "react"
 import { Proveedores, SignProv } from "../types"
 import { allRoutesComponents } from "../data/db"
+import { DefaultError, UserInvalid } from "../errors/errors"
 
 const initionalProv: Proveedores = { prov_id: 0, prov_nombre: '', prov_numero: '', prov_correo: '', prov_contrasenia: '', prov_direccion: '' }
 
@@ -17,10 +18,10 @@ export const useFetchProveedor = (setPage: Dispatch<React.SetStateAction<string>
         })
     }
     const isValidFormProv = () => {
-        const { prov_correo, prov_contrasenia} = proveedor;
+        const { prov_correo, prov_contrasenia } = proveedor;
 
-        return prov_correo.trim() !== '' && prov_contrasenia !== ''        
-        
+        return prov_correo.trim() !== '' && prov_contrasenia !== ''
+
     }
 
     const handleSubmitProv = (e: FormEvent<HTMLFormElement>) => {
@@ -32,7 +33,7 @@ export const useFetchProveedor = (setPage: Dispatch<React.SetStateAction<string>
     const loginProv = async () => {
         try {
             const sign = proveedor as SignProv
-            const res = await fetch(`${url_api}/login_proveedores/`,  {
+            const res = await fetch(`${url_api}/login_proveedores/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -42,14 +43,12 @@ export const useFetchProveedor = (setPage: Dispatch<React.SetStateAction<string>
 
             if (!res.ok) throw new Error(`Error: ${res.statusText}`);
 
-            const data = await res.json()
-            
-            if(data.status === 'error') {
-                alert('Correo o contraseña invalidos')
-                throw new Error(data.message)
-            }
 
-            
+            const data = await res.json()
+
+            if (data.status === 'error') throw new UserInvalid(data.message)
+
+
             const logProv: Proveedores = {
                 prov_id: data.prov_id,
                 prov_correo: data.prov_correo,
@@ -62,7 +61,7 @@ export const useFetchProveedor = (setPage: Dispatch<React.SetStateAction<string>
             setProveedor(logProv)
             setPage(allRoutesComponents.providerProducts)
         } catch (error) {
-            console.log(error)
+            error instanceof UserInvalid ? error.alert() : DefaultError.alert()
         }
     }
 
@@ -81,7 +80,7 @@ export const useFetchProveedor = (setPage: Dispatch<React.SetStateAction<string>
 
             setPage(allRoutesComponents.providerProducts)
         } catch (error) {
-            console.log(error)
+            DefaultError.alert()
         }
     }
 

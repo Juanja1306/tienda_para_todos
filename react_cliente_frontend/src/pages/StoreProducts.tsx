@@ -17,8 +17,8 @@ type StoreProductsProps = {
 export default function StoreProducts({ addToCart, categorias, productos = [], fetchAllProductos, fetchProductosByCategoria }: StoreProductsProps) {
 
   const { filterCat, handleSelectChangeCategory } = useFetchCategorias()
- 
-  useEffect(() => {filterCat === 0 ? fetchAllProductos() : fetchProductosByCategoria(filterCat)}, [filterCat]);
+
+  useEffect(() => { filterCat === 0 ? fetchAllProductos() : fetchProductosByCategoria(filterCat) }, [filterCat]);
 
 
   return (
@@ -46,13 +46,15 @@ export default function StoreProducts({ addToCart, categorias, productos = [], f
           </div>
         </div>
         <div className="main-container__grid">
-          {productos.map((producto) => (
+          {productos.length > 0 ? (productos.map((producto) => (
             <ProductosComponent
               key={uuidv4()}
               producto={producto}
               addToCart={addToCart}
             />
-          ))
+          ))) : (
+            <p>Sin productos</p>
+          )
           }
         </div>
       </main>

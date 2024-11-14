@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { CartItem, OrderProduct, OrderRequest, GetOrderRequest, Proveedores } from "../types"
+import { CreateOrderError, DefaultError } from "../errors/errors";
+import { succesfullAlert } from "../alerts/alerts";
 
 
 export const useFetchOrdenes = () => {
@@ -32,10 +34,12 @@ export const useFetchOrdenes = () => {
             const data = await res.json()
             console.log(data)
 
-            alert('Orden Creada')
+            if (data.statusText !== 'succes') throw new CreateOrderError(data.message)
+
+            succesfullAlert('Se ha creado la compra correctamente')
             removeCart()
         } catch (error) {
-            console.error(error);
+            error instanceof CreateOrderError ? error.alert() : DefaultError.alert()            
         }
     };
 
@@ -45,7 +49,6 @@ export const useFetchOrdenes = () => {
             const response = await res.json()
             setDetalleOrden(response)
         } catch (error) {
-            console.log(error)
             setDetalleOrden(detalleOrdenInicial)
         }
     }

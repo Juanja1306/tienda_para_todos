@@ -30,14 +30,16 @@ export default function Provider({ categorias, fetchProductosByProvider, proveed
 
                 </div>
                 <div className="main-container__grid">
-                    {productosProv.length > 0 && productosProv.map((producto) => (
+                    {productosProv.length > 0 ? (productosProv.map((producto) => (
                         <ProductosComponent
                             key={uuidv4()}
                             producto={producto}
                             addToCart={null}
 
                         />
-                    ))
+                    ))) : (
+                        <p>Sin productos</p>
+                    )
                     }
                 </div>
 

@@ -15,11 +15,7 @@ export const useFetchCategorias = () => {
         fetch(`${url_api}/categorias/`)
             .then((response) => response.json())
             .then((cat: Categorias[]) => setCategorias(cat))
-            .catch((error) => {
-                console.error(error)
-                setCategorias(categoriasIniciales)
-
-            })
+            .catch(() => setCategorias(categoriasIniciales))
     }, [])
 
     const handleSelectChangeCategory = (event: React.ChangeEvent<HTMLSelectElement>) => {

@@ -1,6 +1,8 @@
 
 import { ChangeEvent, FormEvent, useEffect, useState } from "react"
 import { Categorias, CreateProduct, Productos, Proveedores } from "../types"
+import { CreateProductError, DefaultError } from "../errors/errors"
+import { succesfullAlert } from "../alerts/alerts"
 
 export const useFetchProductos = () => {
 
@@ -23,7 +25,7 @@ export const useFetchProductos = () => {
             const products: Productos[] = await response.json()
             setProducto(products)
         } catch (error) {
-            console.log(error)
+
             setProducto([])
         }
     }
@@ -36,7 +38,7 @@ export const useFetchProductos = () => {
                 const products: Productos[] = await response.json()
                 setProducto(products)
             } catch (error) {
-                console.log(error)
+                
                 setProducto([])
             }
         }
@@ -63,13 +65,10 @@ export const useFetchProductos = () => {
         const { id, value } = e.target;
         const isNumber = ['prod_precio_unitario', 'prod_stock', 'fk_cat_id'].includes(id);
 
-
         setNewProduct({
             ...newProduct,
             [id]: isNumber ? +value : value,
         });
-
-        console.log(newProduct)
     };
     const isValidProduct = () => {
         const { prod_descripcion, prod_precio_unitario, prod_stock, imagen } = newProduct
@@ -85,10 +84,6 @@ export const useFetchProductos = () => {
 
     const handleSubmitProduct = async (e: FormEvent<HTMLFormElement>, fk_pro_provid: number) => {
         e.preventDefault();
-
-        setNewProduct({ ...newProduct, ['fk_pro_provid']: fk_pro_provid })
-        //setNewProduct({ ...newProduct, ['fk_cat_id']: 1 })
-
 
         const createProduct: CreateProduct = {
             prod_id: 0,
@@ -110,10 +105,12 @@ export const useFetchProductos = () => {
                 body: JSON.stringify(createProduct)
             })
 
-            if (!response.ok) throw new Error(`Error: ${response.statusText}`);
-
+            if (!response.ok) throw new CreateProductError(response.statusText);
+            
+            succesfullAlert('Producto añadido correctamente')
+            
         } catch (error) {
-            console.log(error)
+            error instanceof CreateProductError ? error.alert() : DefaultError.alert()
         }
 
         setNewProduct(initialProduct)
@@ -129,7 +126,6 @@ export const useFetchProductos = () => {
             reader.onload = () => {
                 setImgSrc(reader.result as string);
                 setNewProduct({ ...newProduct, ['imagen']: reader.result as string })
-
             }
 
         } else {
