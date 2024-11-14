@@ -17,7 +17,7 @@ export default function FormProducts({ categorias, proveedor_id }: FormProductsP
                 <fieldset>
                     <div className="cont__camp">
                         <div className="camp__cont__img">
-                            <img id='imagen' className="camp__img" src={imgSrc} alt="" />
+                            <img id='imagen' className="camp__img selected__img__product" src={imgSrc} alt="" />
 
                         </div>
 
@@ -66,6 +66,7 @@ export default function FormProducts({ categorias, proveedor_id }: FormProductsP
                                     id='fk_cat_id'
                                     onChange={handleChangeProduct}
                                     value={newProduct.fk_cat_id}
+                                    className='select__category'
                                 >
                                     {categorias.length > 0 &&
                                         categorias.map((categoria) => (
