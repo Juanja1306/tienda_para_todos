@@ -6,7 +6,7 @@ __pycache__/
 
 node_modules
 dist
-__init__
+__init__.py
 
 # Logs
 logs
