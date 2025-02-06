@@ -5,7 +5,7 @@ import { Categorias, CreateProduct, Productos, Proveedores } from "../types"
 export const useFetchProductos = () => {
 
     //TODO: cambiar el puerto al momento de Dockerizar
-    const url_api = 'http://localhost:8001'
+    const url_api = 'http://localhost:8000'
 
     const imageNotSelected = '/img/selectImage.jpg'
     const productosIniciales: Productos[] = []

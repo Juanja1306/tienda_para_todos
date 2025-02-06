@@ -6,7 +6,7 @@ const initionalProv: Proveedores = { prov_id: 0, prov_nombre: '', prov_numero: '
 
 export const useFetchProveedor = (setPage: Dispatch<React.SetStateAction<string>>) => {
 
-    const url_api = 'http://localhost:8001'
+    const url_api = 'http://localhost:8000'
 
     const [proveedor, setProveedor] = useState(initionalProv)
 

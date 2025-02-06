@@ -8,7 +8,7 @@ const initialUser: Clientes = { cli_cedula: '', cli_nombre: '', cli_apellido: ''
 
 export const useClient = (setPage:Dispatch<React.SetStateAction<string>>) => {
 
-    const url_api = 'http://localhost:8001'
+    const url_api = 'http://localhost:8000'
 
     const [cliente, setCliente] = useState(initialUser)
     

@@ -3,7 +3,7 @@ import { CartItem, OrderProduct, OrderRequest, GetOrderRequest, Proveedores } fr
 
 
 export const useFetchOrdenes = () => {
-    const url_api = 'http://localhost:8001';
+    const url_api = 'http://localhost:8000';
 
     const detalleOrdenInicial: GetOrderRequest = { prov_id: 0, productos_vendidos: [] }
     const [detalleOrden, setDetalleOrden] = useState<GetOrderRequest>(detalleOrdenInicial)
